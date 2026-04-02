@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Pizza Prime | Painel Profissional</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/logo-link.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login modal removido - acesso direto via icon index.html -->
+    <!-- Enhanced Sidebar Layout --> 
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-pizza-slice"></i>
+                    <span>Pizza Prime</span>
+                </div>
+                <div class="dark-toggle">
+                    <i class="fas fa-moon"></i>
+                    <label class="switch">
+                        <input type="checkbox" id="darkMode">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-chart-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#estoque" class="nav-item" data-section="estoque">
+                    <i class="fas fa-boxes-stacked"></i>
+                    <span>Estoque</span>
+                    <span class="badge">3</span>
+                </a>
+                <a href="#pedidos" class="nav-item" data-section="pedidos">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Pedidos</span>
+                    <span class="badge">156</span>
+                </a>
+                <a href="#reservas" class="nav-item" data-section="reservas">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Reservas</span>
+                    <span class="badge">24</span>
+                </a>
+                <a href="#financeiro" class="nav-item" data-section="financeiro">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>Financeiro</span>
+                </a>
+                <a href="#relatorios" class="nav-item" data-section="relatorios">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Relatórios</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+<a href="index.html" class="logout-btn" title="Voltar para tela principal">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </div>
+        </aside>
+        <main class="admin-main">
+            <header class="admin-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="page-title">Dashboard Principal</div>
+                </div>
+                <div class="header-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="imagem/Margherita Premium.jpg" alt="Admin" class="avatar">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </header>
+            <div class="dashboard-container">
+            <!-- KPIs Financeiros -->
+            <section id="dashboard" class="admin-section active">
+                <h1>Painel Principal</h1>
+                <div class="kpi-grid">
+                    <div class="kpi-card revenue">
+                        <div class="kpi-icon"><i class="fas fa-sack-dollar"></i></div>
+                        <div class="kpi-value" data-metric="revenue">R$ 47.892<small>,43</small></div>
+                        <div class="kpi-label">Faturamento Hoje</div>
+                        <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> +12,4%</div>
+                    </div>
+                    <div class="kpi-card orders">
+                        <div class="kpi-icon"><i class="fas fa-shopping-bag"></i></div>
+                        <div class="kpi-value" data-metric="orders">156</div>
+                        <div class="kpi-label">Pedidos Hoje</div>
+                        <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> +8%</div>
+                    </div>
+                    <div class="kpi-card profit">
+                        <div class="kpi-icon"><i class="fas fa-coins"></i></div>
+                        <div class="kpi-value" data-metric="profit">R$ 18.745<small>,20</small></div>
+                        <div class="kpi-label">Lucro Hoje</div>
+                        <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> +15,2%</div>
+                    </div>
+                    <div class="kpi-card low-stock">
+                        <div class="kpi-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="kpi-value" data-metric="lowstock">3</div>
+                        <div class="kpi-label">Estoque Baixo</div>
+                        <div class="kpi-trend negative"><i class="fas fa-arrow-down"></i> Margherita!</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Estoque -->
+            <section id="estoque" class="admin-section">
+                <h1>Gestão de Estoque</h1>
+                <div class="filters-bar">
+                    <input type="text" class="search-input" placeholder="Buscar por produto...">
+                    <select class="status-filter">
+                        <option value="todos">Todos Status</option>
+                        <option value="low">Baixo</option>
+                        <option value="ok">OK</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Estoque Atual</th>
+                                <th>Mínimo</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Fully populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Pedidos -->
+            <section id="pedidos" class="admin-section">
+                <h1>Pedidos Recentes</h1>
+                <div class="chart-container">
+                    <canvas id="ordersChart"></canvas>
+                </div>
+                <div class="filters-bar">
+                    <button class="filter-btn active" data-filter="hoje">Hoje</button>
+                    <button class="filter-btn" data-filter="semana">Semana</button>
+                    <button class="filter-btn" data-filter="mes">Mês</button>
+                    <input type="text" class="search-input" placeholder="Buscar cliente ou telefone...">
+                    <select class="status-filter">
+                        <option value="todos">Todos Status</option>
+                        <option value="pendente">Pendente</option>
+                        <option value="preparando">Preparando</option>
+                        <option value="entregue">Entregue</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Itens</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Data</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Reservas de Mesa -->
+            <section id="reservas" class="admin-section">
+                <h1>Reservas de Mesa</h1>
+                <div class="kpi-grid">
+                    <div class="kpi-card reservas-total">
+                        <div class="kpi-icon"><i class="fas fa-calendar-day"></i></div>
+                        <div class="kpi-value" data-metric="reservasHoje">24</div>
+                        <div class="kpi-label">Reservas Hoje</div>
+                        <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> +18%</div>
+                    </div>
+                    <div class="kpi-card reservas-pendentes">
+                        <div class="kpi-icon"><i class="fas fa-clock"></i></div>
+                        <div class="kpi-value" data-metric="pendentes">8</div>
+                        <div class="kpi-label">Pendentes</div>
+                        <div class="kpi-trend negative"><i class="fas fa-arrow-down"></i> 33%</div>
+                    </div>
+                    <div class="kpi-card reservas-confirmadas">
+                        <div class="kpi-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="kpi-value" data-metric="confirmadas">14</div>
+                        <div class="kpi-label">Confirmadas</div>
+                        <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> +25%</div>
+                    </div>
+                    <div class="kpi-card mesas-livres">
+                        <div class="kpi-icon"><i class="fas fa-chair"></i></div>
+                        <div class="kpi-value" data-metric="mesasLivres">12/30</div>
+                        <div class="kpi-label">Mesas Livres</div>
+                    </div>
+                </div>
+                <div class="filters-bar">
+                    <button class="filter-btn active" data-filter="hoje">Hoje</button>
+                    <button class="filter-btn" data-filter="semana">Semana</button>
+                    <button class="filter-btn" data-filter="mes">Mês</button>
+                    <input type="text" class="search-input" placeholder="Buscar por nome ou telefone...">
+                    <select class="status-filter">
+                        <option value="todos">Todos Status</option>
+                        <option value="pendente">Pendente</option>
+                        <option value="confirmada">Confirmada</option>
+                        <option value="cancelada">Cancelada</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Data/Hora</th>
+                                <th>Mesa/Pessoas</th>
+                                <th>Telefone</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Financeiro -->
+            <section id="financeiro" class="admin-section">
+                <h1>Controle Financeiro</h1>
+                <div class="financial-grid">
+                    <div class="financial-card">
+                        <h3>Receita Mensal</h3>
+                        <div class="big-number">R$ 284.500<small>,00</small></div>
+                        <div class="financial-bar">
+                            <div class="bar-fill" style="width: 78%"></div>
+                        </div>
+                    </div>
+                    <!-- More cards -->
+                </div>
+            </section>
+
+            <!-- Relatórios -->
+            <section id="relatorios" class="admin-section">
+                <h1>Relatórios & Gráficos</h1>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Vendas por Dia</h3>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Top Produtos</h3>
+                        <canvas id="productsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Admin Icon DIRETO no painel -->
+    <a href="admin.html" class="floating-admin-icon" title="Ficar no Painel Admin" style="text-decoration:none;">
+        <i class="fas fa-cog" style="line-height:70px;"></i>
+    </a>
+
+<script src="js/admin_fixed.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
+

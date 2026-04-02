@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Pizza Prime | Pizzas Artesanais Premium</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/logo-link.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="index.html" class="logo-link">
+                    <div class="logo">
+                        <i class="fas fa-pizza-slice"></i>
+                        Pizza Prime
+                    </div>
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Início</a></li>
+                    <li><a href="menu.html" class="nav-link active">Menu</a></li>
+                    <li><a href="contato.html" class="nav-link">Contato</a></li>
+                    <li><a href="reserva.html" class="nav-link">Reserva</a></li>
+                    <li id="adminNavLink" class="admin-nav-item" style="display: none;"><a href="admin.html" class="nav-link"><i class="fas fa-cog"></i> Admin</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="menu-hero">
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <h1 class="hero-title">Nosso <span>Menu</span> Premium</h1>
+                <p class="hero-subtitle">Pizzas artesanais com ingredientes frescos da Itália | Delivery 35min | 4.9⭐</p>
+                <div class="hero-stats">
+                    <span><i class="fas fa-star"></i> 4.9 (1.247)</span>
+                    <span><i class="fas fa-fire"></i> 30 Sabores</span>
+                    <span><i class="fas fa-shipping-fast"></i> 35min</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pizzas Section -->
+        <section class="menu-section pizzas">
+            <div class="container">
+                <h2>Pizzas <span>Artesanais</span></h2>
+                <div class="section-intro">
+                    <p>Massas napolitanas assadas a lenha | Ingredientes importados | Bordas recheadas +R$8</p>
+                </div>
+                <div class="menu-tabs">
+                    <button class="tab-button active" data-category="salgadas"><i class="fas fa-pepper-hot"></i> Salgadas</button>
+                    <button class="tab-button" data-category="doces"><i class="fas fa-heart"></i> Doces</button>
+                    <button class="tab-button" data-category="especiais"><i class="fas fa-crown"></i> Especiais</button>
+                </div>
+                <div class="menu-grid">
+                    <!-- Salgadas -->
+                    <div class="menu-card" data-category="salgadas">
+                        <div class="menu-image">
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&h=375&fit=crop" alt="Pizza Margherita">
+                        </div>
+                        <div class="menu-info">
+                            <h3>Margherita Clássica</h3>
+                            <p>Molho de tomate San Marzano, muçarela fior di latte, manjericão fresco</p>
+                            <div class="price">R$ 48<small>,90</small></div>
+                            <button class="add-cart-btn" data-name="Margherita" data-price="48.90">
+                                <i class="fas fa-cart-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-card" data-category="salgadas">
+                        <div class="menu-image">
+                            <img loading="lazy" src="../Pizza Prime/imagem/Calabresa.jpg" alt="Pizza Calabresa">
+                        </div>
+                        <div class="menu-info">
+                            <h3>Calabresa Especial</h3>
+                            <p>Linguiça calabresa artesanal, muçarela, cebola roxa caramelizada, orégano</p>
+                            <div class="price">R$ 52<small>,90</small></div>
+                            <button class="add-cart-btn" data-name="Calabresa" data-price="52.90">
+                                <i class="fas fa-cart-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-card" data-category="salgadas">
+                        <div class="menu-image">
+                            <img loading="lazy" src="../Pizza Prime/imagem/Frango BBQ.jpg" alt="Pizza BBQ">
+                        </div>
+                        <div class="menu-info">
+
+                            <h3>Pizza Frango com Catupiry</h3>
+                            <p>Frango desfiado, catupiry cremoso, muçarela, orégano</p>
+
+                            <div class="price">R$ 59<small>,90</small></div>
+                            <button class="add-cart-btn" data-name="Frango BBQ" data-price="59.90">
+                                <i class="fas fa-cart-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-card" data-category="salgadas">
+                        <div class="menu-image">
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1603048297194-8f7fda3edc05?w=500&h=375&fit=crop" alt="Pizza Vegetariana">
+                        </div>
+                        <div class="menu-info">
+                            <h3>Vegetariana Delícia</h3>
+                            <p>Abobrinha grelhada, berinjela em conserva, pimentão assado, muçarela de búfala</p>
+                            <div class="price">R$ 49<small>,90</small></div>
+                            <button class="add-cart-btn" data-name="Vegetariana" data-price="49.90">
+                                <i class="fas fa-cart-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Doces -->
+                    <div class="menu-card" data-category="doces">
+                        <div class="menu-image">
+                            <img loading="lazy" src="../Pizza Prime/imagem/chocolate.jpg" alt="Pizza Chocolate">
+                        </div>
+                        <div class="menu-info">
+                            <h3>Chocolate com Morango</h3>
+                            <p>Chocolate belga meio amargo, morangos frescos, granulado belga crocante</p>
+                            <div class="price">R$ 44<small>,90</small></div>
+                            <button class="add-cart-btn" data-name="Chocolate Morango" data-price="44.90">
+                                <i class="fas fa-cart-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Especiais -->
+                    <div class="menu-card" data-category="especiais">
+                        <div class="menu-image">
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1518843825959-e63ddf7e0510?w=500&h=375&fit=crop" alt="Pizza Prime Especial">
+                        </div>
+                        <div class="menu-info">
+                            <h3>⭐ Prime Especial</h3>
+                            <p>Frango, catupiry, mussarela, milho verde, ervilhas, batata palha crocante</p>
+                            <div class="price">R$ 62<small>,90</small></div>
+                            <button class="add-cart-btn" data-name="Prime Especial" data-price="62.90">
+                                <i class="fas fa-cart-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="menu-card" data-category="especiais">
+                        <div class="menu-image">
+                            <img loading="lazy" src="../Pizza Prime/imagem/Quatro Queijos Premium.jpg" alt="Quatro Queijos">
+                        </div>
+                        <div class="menu-info">
+                            <h3>Quatro Queijos Premium</h3>
+                            <p>Muçarela fior di latte, provolone piccante, parmesão 24 meses, gorgonzola dolce</p>
+                            <div class="price">R$ 58<small>,90</small></div>
+                            <button class="add-cart-btn" data-name="Quatro Queijos" data-price="58.90">
+                                <i class="fas fa-cart-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-note">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Preços pizza média (8 fatias) | Borda recheada +R$12 | Delivery grátis acima R$60</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bebidas Section -->
+        <section class="menu-section bebidas">
+            <div class="container">
+                <h2>Bebidas & <span>Sobremesas</span></h2>
+                <div class="section-intro">
+                    <p>Cervejas artesanais geladas | Sucos naturais | Sobremesas italianas</p>
+                </div>
+                <div class="menu-grid">
+                    <div class="menu-card small">
+                        <div class="menu-image">
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=300&fit=crop" alt="Coca-Cola">
+                        </div>
+                        <div class="menu-info">
+                            <h3>Coca-Cola 350ml</h3>
+                            <div class="price">R$ 7<small>,00</small></div>
+                        </div>
+                    </div>
+                    <div class="menu-card small">
+                        <div class="menu-image">
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1512568400610-3f3f8f710db9?w=300&h=300&fit=crop" alt="Cerveja Brahma">
+                        </div>
+                        <div class="menu-info">
+                            <h3>Cerveja Brahma 600ml</h3>
+                            <div class="price">R$ 12<small>,00</small></div>
+                        </div>
+                    </div>
+                    <div class="menu-card small">
+                        <div class="menu-image">
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1542994983-9c358067390b?w=300&h=300&fit=crop" alt="Guaraná">
+                        </div>
+                        <div class="menu-info">
+                            <h3>Guaraná Antarctica 350ml</h3>
+                            <div class="price">R$ 7<small>,50</small></div>
+                        </div>
+                    </div>
+                    <div class="menu-card small">
+                        <div class="menu-image">
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1579586337278-4fab0d46a685?w=300&h=300&fit=crop" alt="Suco Natural">
+                        </div>
+                        <div class="menu-info">
+                            <h3>Suco Laranja Natural 500ml</h3>
+                            <div class="price">R$ 12<small>,00</small></div>
+                        </div>
+                    </div>
+                    <div class="menu-card small">
+                        <div class="menu-image">
+                            <img loading="lazy" src="https://images.unsplash.com/photo-1519125323398-675f398ad308?w=300&h=300&fit=crop" alt="Sorvete">
+                        </div>
+                        <div class="menu-info">
+                            <h3>Sorvete Italiano 3 Bolas</h3>
+                            <div class="price">R$ 18<small>,90</small></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="menu-cta">
+            <div class="container">
+                <h2>Peça Agora!</h2>
+                <p>Delivery em 35min | Pedido mínimo R$40 | Grátis acima R$60</p>
+                <a href="contato.html#form" class="cta-button huge whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i> Fazer Pedido WhatsApp
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Pizza Prime. Rua das Pizzas, 123 - SP | (11) 99999-9999</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

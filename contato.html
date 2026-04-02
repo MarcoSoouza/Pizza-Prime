@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - Pizza Prime | Faça seu Pedido</title>
+<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/contato.css">
+    <link rel="stylesheet" href="css/logo-link.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="index.html" class="logo-link">
+                    <div class="logo">
+                        <i class="fas fa-pizza-slice"></i>
+                        Pizza Prime
+                    </div>
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Início</a></li>
+                    <li><a href="menu.html" class="nav-link">Menu</a></li>
+                    <li><a href="contato.html" class="nav-link active">Contato</a></li>
+                    <li><a href="reserva.html" class="nav-link">Reserva</a></li>
+                    <li id="adminNavLink" class="admin-nav-item" style="display: none;"><a href="admin.html" class="nav-link"><i class="fas fa-cog"></i> Admin</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Aprimorado -->
+        <section class="contact-hero">
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <h1><i class="fas fa-phone"></i> Contato & Pedidos</h1>
+                <p class="hero-subtitle">Fale conosco ou faça seu pedido por aqui mesmo!</p>
+                <div class="quick-actions">
+                    <a href="tel:+5511999999999" class="quick-btn call">
+                        <i class="fas fa-phone"></i>
+                        Ligar Agora
+                    </a>
+                    <a href="#form" class="quick-btn whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        WhatsApp
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Informações Detalhadas -->
+        <section class="contact-info-section">
+            <div class="container">
+                <div class="info-header">
+                    <h2>Nossas Informações</h2>
+                    <p>Entre em contato pelos canais abaixo</p>
+                </div>
+                <div class="contact-cards">
+                    <div class="contact-card large">
+                        <div class="card-icon large">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h3>Unidade Principal</h3>
+                        <p><strong>Rua das Pizzas, 123</strong><br>
+                        Centro, São Paulo - SP<br>
+                        CEP: 01234-567</p>
+                        <a href="https://maps.google.com?q=Rua+das+Pizzas+123" target="_blank" class="map-btn">
+                            <i class="fas fa-map"></i> Abrir Mapa
+                        </a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="card-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h3>Telefone & WhatsApp</h3>
+                        <p><strong>(11) 99999-9999</strong><br>
+                        Segunda a Domingo</p>
+                        <div class="phone-actions">
+                            <a href="tel:+5511999999999" class="phone-link">
+                                <i class="fas fa-phone"></i> Ligar
+                            </a>
+                            <a href="https://wa.me/5511999999999" class="phone-link whatsapp">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <div class="card-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email Corporativo</h3>
+                        <p>contato@pizzaprime.com.br<br><small>Resposta em até 24h</small></p>
+                        <a href="mailto:contato@pizzaprime.com.br" class="email-btn">Enviar Email</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Horário de Atendimento</h3>
+                        <p><strong>Restaurante:</strong> Seg-Sáb 18h-23h | Dom 12h-22h<br>
+                        <strong>Delivery:</strong> Todos os dias até 23h</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Formulário Premium -->
+        <section id="form" class="contact-form-section">
+            <div class="container">
+                <div class="form-hero">
+                    <h2>Faça seu Pedido ou Envie Mensagem</h2>
+                    <p>Preencha abaixo e nossa equipe entrará em contato em minutos</p>
+                </div>
+                <form class="contact-form premium" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name"><i class="fas fa-user"></i> Nome Completo *</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone"><i class="fas fa-phone"></i> Telefone/WhatsApp *</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="type"><i class="fas fa-list"></i> Tipo de Contato</label>
+                            <select id="type">
+                                <option value="pedido">Fazer Pedido</option>
+                                <option value="duvida">Dúvida</option>
+                                <option value="reclamacao">Reclamação</option>
+                                <option value="sugestao">Sugestão</option>
+                                <option value="parceria">Parceria</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group full">
+                        <label for="message"><i class="fas fa-comment"></i> Mensagem ou Pedido *</label>
+                        <textarea id="message" rows="6" placeholder="Descreva seu pedido detalhadamente ou sua dúvida. Estamos aqui para ajudar!" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-button large submit-btn">
+                        <i class="fas fa-paper-plane"></i> Enviar Mensagem
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Canais Rápidos -->
+        <section class="quick-contact">
+            <div class="container">
+                <h2>Canais Rápidos</h2>
+                <div class="quick-grid">
+                    <div class="quick-item">
+                        <a href="tel:+5511999999999" class="quick-link phone">
+                            <i class="fas fa-phone fa-2x"></i>
+                            <span>Ligar</span>
+                        </a>
+                    </div>
+                    <div class="quick-item">
+                        <a href="https://wa.me/5511999999999" class="quick-link whatsapp">
+                            <i class="fab fa-whatsapp fa-2x"></i>
+                            <span>WhatsApp</span>
+                        </a>
+                    </div>
+                    <div class="quick-item">
+                        <a href="mailto:contato@pizzaprime.com.br" class="quick-link email">
+                            <i class="fas fa-envelope fa-2x"></i>
+                            <span>Email</span>
+                        </a>
+                    </div>
+                    <div class="quick-item">
+                        <a href="menu.html" class="quick-link menu">
+                            <i class="fas fa-utensils fa-2x"></i>
+                            <span>Ver Menu</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Pizza Prime | <strong>Rua das Pizzas, 123 - SP</strong> | (11) 99999-9999</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

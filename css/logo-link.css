@@ -1,0 +1,23 @@
+/* Logo Link Navigation Styles - Added for Pizza Prime task */
+
+/* Ensure logo is clickable and matches nav behavior */
+.logo-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.logo-link:hover {
+    transform: scale(1.02);
+}
+
+.logo-link:hover .logo {
+    transform: scale(1.05);
+}
+
+/* Maintain compatibility with existing logo styles */
+.logo-link .logo {
+    transition: transform 0.3s ease;
+}
+

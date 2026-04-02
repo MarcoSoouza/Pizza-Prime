@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Pizza Prime | Painel Profissional</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/logo-link.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login modal removido - acesso direto via icon index.html -->
+    <!-- Enhanced Sidebar Layout --> 
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-pizza-slice"></i>
+                    <span>Pizza Prime</span>
+                </div>
+                <div class="dark-toggle">
+                    <i class="fas fa-moon"></i>
+                    <label class="switch">
+                        <input type="checkbox" id="darkMode">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-chart-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#estoque" class="nav-item" data-section="estoque">
+                    <i class="fas fa-boxes-stacked"></i>
+                    <span>Estoque</span>
+                    <span class="badge">3</span>
+                </a>
+                <a href="#pedidos" class="nav-item" data-section="pedidos">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Pedidos</span>
+                    <span class="badge">156</span>
+                </a>
+                <a href="#financeiro" class="nav-item" data-section="financeiro">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>Financeiro</span>
+                </a>
+                <a href="#relatorios" class="nav-item" data-section="relatorios">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Relatórios</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </button>
+            </div>
+        </aside>
+        <main class="admin-main">
+            <header class="admin-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="page-title">Dashboard Principal</div>
+                </div>
+                <div class="header-right">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="imagem/Margherita Premium.jpg" alt="Admin" class="avatar">
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </header>
+            <div class="dashboard-container">
+            <!-- KPIs Financeiros -->
+            <section id="dashboard" class="admin-section active">
+                <h1>Painel Principal</h1>
+                <div class="kpi-grid">
+                    <div class="kpi-card revenue">
+                        <div class="kpi-icon"><i class="fas fa-sack-dollar"></i></div>
+                        <div class="kpi-value" data-metric="revenue">R$ 47.892<small>,43</small></div>
+                        <div class="kpi-label">Faturamento Hoje</div>
+                        <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> +12,4%</div>
+                    </div>
+                    <div class="kpi-card orders">
+                        <div class="kpi-icon"><i class="fas fa-shopping-bag"></i></div>
+                        <div class="kpi-value" data-metric="orders">156</div>
+                        <div class="kpi-label">Pedidos Hoje</div>
+                        <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> +8%</div>
+                    </div>
+                    <div class="kpi-card profit">
+                        <div class="kpi-icon"><i class="fas fa-coins"></i></div>
+                        <div class="kpi-value" data-metric="profit">R$ 18.745<small>,20</small></div>
+                        <div class="kpi-label">Lucro Hoje</div>
+                        <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> +15,2%</div>
+                    </div>
+                    <div class="kpi-card low-stock">
+                        <div class="kpi-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="kpi-value" data-metric="lowstock">3</div>
+                        <div class="kpi-label">Estoque Baixo</div>
+                        <div class="kpi-trend negative"><i class="fas fa-arrow-down"></i> Margherita!</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Estoque -->
+            <section id="estoque" class="admin-section">
+                <h1>Gestão de Estoque</h1>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Estoque Atual</th>
+                                <th>Mínimo</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="alert">
+                                <td>Margherita Premium</td>
+                                <td>12</td>
+                                <td>20</td>
+                                <td><span class="status low">🔴 Baixo</span></td>
+                                <td><button class="btn-small reorder">Reabastecer</button></td>
+                            </tr>
+                            <tr>
+                                <td>Calabresa Especial</td>
+                                <td>45</td>
+                                <td>20</td>
+                                <td><span class="status ok">🟡 OK</span></td>
+                                <td><button class="btn-small">Editar</button></td>
+                            </tr>
+                            <!-- More rows added in JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Pedidos -->
+            <section id="pedidos" class="admin-section">
+                <h1>Pedidos Recentes</h1>
+                <div class="chart-container">
+                    <canvas id="ordersChart"></canvas>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Itens</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Financeiro -->
+            <section id="financeiro" class="admin-section">
+                <h1>Controle Financeiro</h1>
+                <div class="financial-grid">
+                    <div class="financial-card">
+                        <h3>Receita Mensal</h3>
+                        <div class="big-number">R$ 284.500<small>,00</small></div>
+                        <div class="financial-bar">
+                            <div class="bar-fill" style="width: 78%"></div>
+                        </div>
+                    </div>
+                    <!-- More cards -->
+                </div>
+            </section>
+
+            <!-- Relatórios -->
+            <section id="relatorios" class="admin-section">
+                <h1>Relatórios & Gráficos</h1>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Vendas por Dia</h3>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Top Produtos</h3>
+                        <canvas id="productsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Admin Icon DIRETO no painel -->
+    <a href="admin.html" class="floating-admin-icon" title="Ficar no Painel Admin" style="text-decoration:none;">
+        <i class="fas fa-cog" style="line-height:70px;"></i>
+    </a>
+
+    <script src="js/admin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
+
+

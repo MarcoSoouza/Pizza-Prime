@@ -415,16 +415,16 @@ section.visible {
 
 .floating-whatsapp-icon {
     position: fixed;
-    bottom: 30px;
-    left: 30px;
-    width: 70px;
-    height: 70px;
+    bottom: 25px;
+    left: 25px;
+    width: 60px;
+    height: 60px;
     background: linear-gradient(135deg, #25D366, #128C7E);
     border-radius: 50%;
     color: white;
-    font-size: 2rem;
+    font-size: 1.6rem;
     cursor: pointer;
-    box-shadow: 0 15px 40px rgba(37,211,102,0.5);
+    box-shadow: 0 12px 30px rgba(37,211,102,0.5);
     transition: all 0.3s ease;
     z-index: 9999;
     display: flex;
@@ -435,7 +435,7 @@ section.visible {
 
 .floating-whatsapp-icon:hover {
     transform: scale(1.15);
-    box-shadow: 0 25px 60px rgba(37,211,102,0.7);
+    box-shadow: 0 20px 45px rgba(37,211,102,0.7);
 }
 
 .admin-modal {

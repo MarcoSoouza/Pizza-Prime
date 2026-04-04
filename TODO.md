@@ -1,10 +1,14 @@
-# TODO: Implementar redirecionamento do botão "Sair" no painel admin para index.html - ✅ COMPLETO
+# TODO List - Pizza Prime Updates
 
-## Passos Concluídos:
-- [x] 1. Criar TODO.md com passos do plano
-- [x] 2. Editar admin.html: Mudar botão "Sair" para link `<a href="index.html" class="logout-btn">` (direto, sem JS)
-- [x] 3. Remover event listeners de logout em js/admin_fixed.js e js/admin.js (evita conflitos)
-- [x] 4. Testar redirecionamento (abra admin.html e clique em "Sair")
+## Current Task: Add WhatsApp Floating Icon (Left Side All Pages)
+- [x] Create TODO.md with steps
+- [x] Add WhatsApp icon HTML to all 5 pages (index.html, menu.html, contato.html, reserva.html, admin.html)
+- [x] Add CSS to css/style.css for .floating-whatsapp-icon
+- [ ] Test locally
+- [ ] git add/commit/push to GitHub
+- [ ] Verify on live site
 
-Task finalizada. O clique em "Sair" agora redireciona diretamente para index.html.
-
+## Previous Tasks
+- [x] Organized menu images to Sabores e Bebida/
+- [x] Updated TODO files
+- [x] Pushed to GitHub main

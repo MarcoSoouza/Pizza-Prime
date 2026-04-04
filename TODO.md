@@ -1,14 +1,15 @@
-# TODO List - Pizza Prime Updates
+# Pizza Prime - TODO Tracker
 
-## Current Task: Add WhatsApp Floating Icon (Left Side All Pages)
-- [x] Create TODO.md with steps
-- [x] Add WhatsApp icon HTML to all 5 pages (index.html, menu.html, contato.html, reserva.html, admin.html)
-- [x] Add CSS to css/style.css for .floating-whatsapp-icon
-- [ ] Test locally
-- [ ] git add/commit/push to GitHub
-- [ ] Verify on live site
+## ✅ Concluído
+- [x] Upload atualizações GitHub + Site (GitHub Pages)
+- [x] Adicionar ícone WhatsApp floating bottom-left todas páginas (https://wa.me/5511999999999)
+- [x] Admin icon: quase invisível público (opacity 0.1), visível hover e full admin.html
 
-## Previous Tasks
-- [x] Organized menu images to Sabores e Bebida/
-- [x] Updated TODO files
-- [x] Pushed to GitHub main
+## 🔄 Em Progresso
+- Testar site live: https://marcosoouza.github.io/Pizza-Prime/
+
+## ⏳ Próximos
+- Confirmar número WhatsApp real
+- Mobile responsive icons
+- Analytics integração
+

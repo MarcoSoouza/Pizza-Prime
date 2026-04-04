@@ -399,7 +399,7 @@ section.visible {
     box-shadow: 0 15px 40px rgba(255,71,87,0.5);
     transition: all 0.3s ease;
     z-index: 9999;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
 }

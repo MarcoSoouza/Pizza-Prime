@@ -43,11 +43,6 @@
                     <span>Pedidos</span>
                     <span class="badge">156</span>
                 </a>
-                <a href="#reservas" class="nav-item" data-section="reservas">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Reservas</span>
-                    <span class="badge">24</span>
-                </a>
                 <a href="#financeiro" class="nav-item" data-section="financeiro">
                     <i class="fas fa-dollar-sign"></i>
                     <span>Financeiro</span>
@@ -118,14 +113,6 @@
             <!-- Estoque -->
             <section id="estoque" class="admin-section">
                 <h1>Gestão de Estoque</h1>
-                <div class="filters-bar">
-                    <input type="text" class="search-input" placeholder="Buscar por produto...">
-                    <select class="status-filter">
-                        <option value="todos">Todos Status</option>
-                        <option value="low">Baixo</option>
-                        <option value="ok">OK</option>
-                    </select>
-                </div>
                 <div class="table-container">
                     <table class="admin-table">
                         <thead>
@@ -138,7 +125,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Fully populated by JS -->
+                            <tr class="alert">
+                                <td>Margherita Premium</td>
+                                <td>12</td>
+                                <td>20</td>
+                                <td><span class="status low">🔴 Baixo</span></td>
+                                <td><button class="btn-small reorder">Reabastecer</button></td>
+                            </tr>
+                            <tr>
+                                <td>Calabresa Especial</td>
+                                <td>45</td>
+                                <td>20</td>
+                                <td><span class="status ok">🟡 OK</span></td>
+                                <td><button class="btn-small">Editar</button></td>
+                            </tr>
+                            <!-- More rows added in JS -->
                         </tbody>
                     </table>
                 </div>
@@ -150,18 +151,6 @@
                 <div class="chart-container">
                     <canvas id="ordersChart"></canvas>
                 </div>
-                <div class="filters-bar">
-                    <button class="filter-btn active" data-filter="hoje">Hoje</button>
-                    <button class="filter-btn" data-filter="semana">Semana</button>
-                    <button class="filter-btn" data-filter="mes">Mês</button>
-                    <input type="text" class="search-input" placeholder="Buscar cliente ou telefone...">
-                    <select class="status-filter">
-                        <option value="todos">Todos Status</option>
-                        <option value="pendente">Pendente</option>
-                        <option value="preparando">Preparando</option>
-                        <option value="entregue">Entregue</option>
-                    </select>
-                </div>
                 <div class="table-container">
                     <table class="admin-table">
                         <thead>
@@ -172,67 +161,6 @@
                                 <th>Total</th>
                                 <th>Status</th>
                                 <th>Data</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- Reservas de Mesa -->
-            <section id="reservas" class="admin-section">
-                <h1>Reservas de Mesa</h1>
-                <div class="kpi-grid">
-                    <div class="kpi-card reservas-total">
-                        <div class="kpi-icon"><i class="fas fa-calendar-day"></i></div>
-                        <div class="kpi-value" data-metric="reservasHoje">24</div>
-                        <div class="kpi-label">Reservas Hoje</div>
-                        <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> +18%</div>
-                    </div>
-                    <div class="kpi-card reservas-pendentes">
-                        <div class="kpi-icon"><i class="fas fa-clock"></i></div>
-                        <div class="kpi-value" data-metric="pendentes">8</div>
-                        <div class="kpi-label">Pendentes</div>
-                        <div class="kpi-trend negative"><i class="fas fa-arrow-down"></i> 33%</div>
-                    </div>
-                    <div class="kpi-card reservas-confirmadas">
-                        <div class="kpi-icon"><i class="fas fa-check-circle"></i></div>
-                        <div class="kpi-value" data-metric="confirmadas">14</div>
-                        <div class="kpi-label">Confirmadas</div>
-                        <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> +25%</div>
-                    </div>
-                    <div class="kpi-card mesas-livres">
-                        <div class="kpi-icon"><i class="fas fa-chair"></i></div>
-                        <div class="kpi-value" data-metric="mesasLivres">12/30</div>
-                        <div class="kpi-label">Mesas Livres</div>
-                    </div>
-                </div>
-                <div class="filters-bar">
-                    <button class="filter-btn active" data-filter="hoje">Hoje</button>
-                    <button class="filter-btn" data-filter="semana">Semana</button>
-                    <button class="filter-btn" data-filter="mes">Mês</button>
-                    <input type="text" class="search-input" placeholder="Buscar por nome ou telefone...">
-                    <select class="status-filter">
-                        <option value="todos">Todos Status</option>
-                        <option value="pendente">Pendente</option>
-                        <option value="confirmada">Confirmada</option>
-                        <option value="cancelada">Cancelada</option>
-                    </select>
-                </div>
-                <div class="table-container">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Cliente</th>
-                                <th>Data/Hora</th>
-                                <th>Mesa/Pessoas</th>
-                                <th>Telefone</th>
-                                <th>Status</th>
-                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>

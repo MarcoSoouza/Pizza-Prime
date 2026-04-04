@@ -510,68 +510,15 @@ input:checked + .slider:before {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.status.low, .status.cancelada { 
+.status.low { 
     background: linear-gradient(135deg, #fee2e2, #fecaca);
     color: #dc2626;
     animation: pulse 2s infinite;
 }
 
-.status.ok, .status.confirmada { 
+.status.ok { 
     background: linear-gradient(135deg, #d1fae5, #a7f3d0);
     color: #059669;
-}
-
-.status.pendente { 
-    background: linear-gradient(135deg, #fef3c7, #fde68a);
-    color: #d97706;
-}
-
-.filter-btn, .status-filter, .search-input {
-    padding: 0.8rem 1.5rem;
-    border: 2px solid rgba(255,255,255,0.2);
-    border-radius: 25px;
-    background: var(--admin-card);
-    color: var(--admin-text);
-    margin-right: 1rem;
-    transition: all 0.3s ease;
-}
-
-.filter-btn {
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.filter-btn.active, .filter-btn:hover {
-    background: var(--admin-primary);
-    color: white;
-    border-color: var(--admin-primary);
-    transform: translateY(-2px);
-}
-
-.search-input {
-    min-width: 250px;
-}
-
-.status-filter {
-    min-width: 150px;
-}
-
-.filters-bar {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.confirmar {
-    background: linear-gradient(135deg, #10b981, #059669) !important;
-    color: white !important;
-}
-
-.cancelar {
-    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-    color: white !important;
 }
 
 .btn-small {

@@ -156,35 +156,56 @@ function initMenuTabs() {
     });
 }
 
-// 2. Cart Functionality
+// 2. Enhanced Cart Functionality (supports .add-cart-btn and .details-btn)
 function initCart() {
     let cart = JSON.parse(localStorage.getItem('pizzaCart')) || [];
     
+    // Legacy .add-cart-btn
     document.querySelectorAll('.add-cart-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const name = btn.dataset.name;
-            const price = parseFloat(btn.dataset.price);
+        btn.addEventListener('click', addToCartHandler(btn));
+    });
+    
+    // New .details-btn
+    document.querySelectorAll('.details-btn').forEach(btn => {
+        btn.addEventListener('click', addToCartHandler(btn));
+    });
+    
+    function addToCartHandler(btn) {
+        return () => {
+            let name = btn.dataset.name;
+            let priceStr = btn.dataset.price || btn.closest('.pizza-card')?.querySelector('.price')?.textContent || 'R$ 50';
+            
+            // Parse price from text like "R$ 52,00"
+            let price = parseFloat(priceStr.replace(/[^\d,]/g, '').replace(',', '.'));
+            if (!price) price = 50;
+            
+            if (!name) name = btn.closest('.pizza-card')?.querySelector('h3')?.textContent.trim() || 'Pizza';
             
             cart.push({name, price, qty: 1});
             localStorage.setItem('pizzaCart', JSON.stringify(cart));
             
             // Visual feedback
+            const originalText = btn.textContent;
             btn.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
             btn.style.background = '#28a745';
             setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-cart-plus"></i> Adicionar';
+                btn.textContent = originalText;
                 btn.style.background = '';
             }, 1500);
             
-            showCartModal();
-        });
-    });
+            showCartToast(cart.length);
+        };
+    }
     
-    function showCartModal() {
-        // Simple toast notification (add modal CSS if needed)
+    function showCartToast(count) {
+        // Simple toast
         const toast = document.createElement('div');
-        toast.className = 'cart-toast';
-        toast.textContent = `Carrinho: ${cart.length} item${cart.length > 1 ? 's' : ''}`;
+        toast.style.cssText = `
+            position: fixed; top: 20px; right: 20px; background: #28a745; color: white; 
+            padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 8px 24px rgba(40,167,69,0.4);
+            z-index: 9999; font-weight: 600;
+        `;
+        toast.textContent = `🛒 Carrinho: ${count} item${count > 1 ? 's' : ''}`;
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
     }
@@ -306,10 +327,37 @@ function throttle(func, limit) {
     };
 }
 
+// Load More Functionality
+function initLoadMore() {
+    const loadBtn = document.getElementById('load-more');
+    const cards = document.querySelectorAll('.pizza-card');
+    if (!loadBtn || cards.length === 0) return;
+    
+    let visibleCount = 12; // Show first 12
+    cards.forEach((card, index) => {
+        if (index >= visibleCount) card.style.display = 'none';
+    });
+    
+    loadBtn.addEventListener('click', () => {
+        const hiddenCards = Array.from(cards).slice(visibleCount, visibleCount + 6);
+        hiddenCards.forEach(card => {
+            card.style.display = 'block';
+            card.style.animation = 'fadeInUp 0.5s ease forwards';
+        });
+        
+        visibleCount += 6;
+        
+        if (visibleCount >= cards.length) {
+            loadBtn.style.display = 'none';
+        }
+    });
+}
+
 // Initialize all features
 document.addEventListener('DOMContentLoaded', () => {
     initMenuTabs();
     initCart();
+    initLoadMore(); // New
     initMultiStepForm();
     initEnhancedForms();
     

@@ -18,12 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
             revenue: 47892.43,
             orders: 156,
             profit: 18745.20,
-            lowstock: 3,
-            // Reservas KPIs
-            reservasHoje: 24,
-            pendentes: 8,
-            confirmadas: 14,
-            mesasLivres: '12/30'
+            lowstock: 3
         },
         stock: [
             { name: 'Margherita Premium', current: 12, min: 20, status: 'low' },
@@ -34,30 +29,17 @@ document.addEventListener('DOMContentLoaded', function() {
             { name: 'Prime Especial', current: 22, min: 20, status: 'low' }
         ],
         recentOrders: [
-            { id: '#PP001', cliente: 'João Silva', telefone: '(11)99999-0001', items: 2, total: 128.90, status: 'pendente', data: '2024-10-16 18:30' },
-            { id: '#PP002', cliente: 'Maria Oliveira', telefone: '(11)98888-0002', items: 3, total: 189.70, status: 'preparando', data: '2024-10-16 19:15' },
-            { id: '#PP003', cliente: 'Pedro Santos', telefone: '(11)97777-0003', items: 1, total: 59.90, status: 'entregue', data: '2024-10-16 17:45' },
-            { id: '#PP004', cliente: 'Ana Costa', telefone: '(11)96666-0004', items: 4, total: 245.50, status: 'pendente', data: '2024-10-16 20:00' },
-            { id: '#PP005', cliente: 'Lucas Pereira', telefone: '(11)95555-0005', items: 2, total: 98.90, status: 'preparando', data: '2024-10-16 18:00' },
-            { id: '#PP006', cliente: 'Fernanda Lima', telefone: '(11)94444-0006', items: 1, total: 79.90, status: 'entregue', data: '2024-10-15 21:30' }
+            { id: '#PP001', client: 'João Silva', items: 2, total: 128.90, status: 'entregue', date: '2024-10-15 19:32' },
+            { id: '#PP002', client: 'Maria Oliveira', items: 3, total: 189.70, status: 'preparando', date: '2024-10-15 20:15' },
+            { id: '#PP003', client: 'Pedro Santos', items: 1, total: 59.90, status: 'entregue', date: '2024-10-15 18:45' }
+            // More populated dynamically
         ],
-        // NOVO: Mock Reservas (matching reserva.html fields)
-        reservas: [
-            { id: 'R001', cliente: 'Ana Silva', data: '2024-10-16', hora: '19:00', pessoas: '4', mesa: 'Mesa Família', telefone: '(11)99988-7766', status: 'confirmada', obs: 'Aniversário' },
-            { id: 'R002', cliente: 'Carlos Santos', data: '2024-10-16', hora: '20:30', pessoas: '2', mesa: 'Casal Romântico', telefone: '(11)98877-6655', status: 'pendente', obs: '' },
-            { id: 'R003', cliente: 'Maria Oliveira', data: '2024-10-16', hora: '21:00', pessoas: '6', mesa: 'VIP Exclusiva', telefone: '(11)97766-5544', status: 'confirmada', obs: 'Reserva VIP' },
-            { id: 'R004', cliente: 'Pedro Lima', data: '2024-10-15', hora: '18:30', pessoas: '4', mesa: 'Varanda Pet', telefone: '(11)96655-4433', status: 'cancelada', obs: 'Pet doente' },
-            { id: 'R005', cliente: 'Julia Costa', data: '2024-10-17', hora: '19:30', pessoas: '2', mesa: 'Casal', telefone: '(11)95544-3322', status: 'pendente', obs: '' },
-            { id: 'R006', cliente: 'Roberto Almeida', data: '2024-10-16', hora: '22:00', pessoas: '8', mesa: 'Varanda', telefone: '(11)94433-2211', status: 'confirmada', obs: 'Grupo amigos' }
-            // More added dynamically
-        ],
-        salesTrend: [3200, 4500, 3800, 5200, 6100, 5800, 7200],
+        salesTrend: [3200, 4500, 3800, 5200, 6100, 5800, 7200], // Last 7 days
         topProducts: {
             labels: ['Margherita', 'Calabresa', 'Frango BBQ', 'Quatro Queijos', 'Chocolate'],
             data: [45, 38, 25, 22, 18]
         }
     };
-
 
     // Charts
     let ordersChart, salesChart, productsChart;
@@ -190,21 +172,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Update KPIs (Randomize for demo) - Extended for Reservas
+    // Update KPIs (Randomize for demo)
     function updateKPIs() {
         const kpis = document.querySelectorAll('[data-metric]');
         kpis.forEach(kpi => {
             const metric = kpi.dataset.metric;
             let value = mockData.kpis[metric];
-            
-            // Reservas specific logic
-            if (metric === 'mesasLivres') {
-                const [livres, total] = value.split('/');
-                const numLivres = parseInt(livres) + Math.floor(Math.random() * 2) - 1;
-                kpi.textContent = `${Math.max(0, numLivres)}/${total}`;
-                return;
-            }
-            
             if (metric === 'revenue' || metric === 'profit') {
                 value += (Math.random() - 0.5) * 1000;
                 kpi.innerHTML = 'R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '<small>,00</small>';
@@ -215,271 +188,54 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Populate Tables - Extended for Reservas
+    // Populate Tables
     function populateTables() {
-        // Stock Table - Dynamic with filters
+        // Stock Table
         const stockTbody = document.querySelector('#estoque tbody');
-        if (stockTbody) {
-            let filteredStock = [...mockData.stock];
-            
-            // Filters
-            const searchTerm = document.querySelector('#estoque .search-input')?.value.toLowerCase() || '';
-            const statusFilter = document.querySelector('#estoque .status-filter')?.value || 'todos';
-            
-            // Search
-            if (searchTerm) {
-                filteredStock = filteredStock.filter(item => 
-                    item.name.toLowerCase().includes(searchTerm)
-                );
-            }
-            
-            // Status
-            if (statusFilter !== 'todos') {
-                filteredStock = filteredStock.filter(item => item.status === statusFilter);
-            }
-            
-            stockTbody.innerHTML = filteredStock.map(item => `
-                <tr class="${item.status}">
-                    <td>${item.name}</td>
-                    <td>${item.current}</td>
-                    <td>${item.min}</td>
-                    <td><span class="status ${item.status}">${item.status === 'low' ? '🔴 Baixo' : '🟢 OK'}</span></td>
-                    <td>
-                        <button class="btn-small reabastecer" data-name="${item.name}">Reabastecer</button>
-                        <button class="btn-small ajustar" data-name="${item.name}">Ajustar</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
+        stockTbody.innerHTML = mockData.stock.map(item => `
+            <tr class="${item.status}">
+                <td>${item.name}</td>
+                <td>${item.current}</td>
+                <td>${item.min}</td>
+                <td><span class="status ${item.status}">${item.status === 'low' ? '🔴 Baixo' : '🟢 OK'}</span></td>
+                <td><button class="btn-small ${item.status === 'low' ? 'reorder' : ''}">${item.status === 'low' ? 'Reabastecer' : 'Editar'}</button></td>
+            </tr>
+        `).join('');
 
-        // Orders Table - Dynamic with filters
+        // Orders Table
         const ordersTbody = document.querySelector('#pedidos tbody');
-        if (ordersTbody) {
-            let filteredOrders = [...mockData.recentOrders];
-            
-            // Filters
-            const currentPeriod = document.querySelector('#pedidos .filter-btn.active')?.dataset.filter || 'hoje';
-            const searchTerm = document.querySelector('#pedidos .search-input')?.value.toLowerCase() || '';
-            const statusFilter = document.querySelector('#pedidos .status-filter')?.value || 'todos';
-            
-            // Period filter
-            filteredOrders = filteredOrders.filter(o => {
-                const today = '2024-10-16';
-                if (currentPeriod === 'hoje' && !o.data.includes(today)) return false;
-                return true;
-            });
-            
-            // Search
-            if (searchTerm) {
-                filteredOrders = filteredOrders.filter(o => 
-                    o.cliente.toLowerCase().includes(searchTerm) ||
-                    o.telefone.toLowerCase().includes(searchTerm)
-                );
-            }
-            
-            // Status
-            if (statusFilter !== 'todos') {
-                filteredOrders = filteredOrders.filter(o => o.status === statusFilter);
-            }
-            
-            ordersTbody.innerHTML = filteredOrders.map(order => `
-                <tr>
-                    <td>${order.id}</td>
-                    <td>${order.cliente}</td>
-                    <td>${order.items} itens</td>
-                    <td>R$ ${order.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                    <td><span class="status ${order.status}">${order.status.toUpperCase()}</span></td>
-                    <td>${order.data}</td>
-                    <td>
-                        <button class="btn-small preparar" data-id="${order.id}">Preparar</button>
-                        <button class="btn-small entregar" data-id="${order.id}">Entregar</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // NOVO: Reservas Table
-        const reservasTbody = document.querySelector('#reservas tbody');
-        if (reservasTbody) {
-            let filteredReservas = [...mockData.reservas];
-            
-            // Apply current filters
-            const currentPeriod = document.querySelector('.filter-btn.active')?.dataset.filter || 'hoje';
-            const searchTerm = document.querySelector('.search-input')?.value.toLowerCase() || '';
-            const statusFilter = document.querySelector('.status-filter')?.value || 'todos';
-            
-            // Filter by period (simple mock)
-            filteredReservas = filteredReservas.filter(r => {
-                const today = new Date('2024-10-16').toISOString().split('T')[0];
-                if (currentPeriod === 'hoje' && r.data !== today) return false;
-                return true;
-            });
-            
-            // Filter by search
-            if (searchTerm) {
-                filteredReservas = filteredReservas.filter(r => 
-                    r.cliente.toLowerCase().includes(searchTerm) ||
-                    r.telefone.toLowerCase().includes(searchTerm)
-                );
-            }
-            
-            // Filter by status
-            if (statusFilter !== 'todos') {
-                filteredReservas = filteredReservas.filter(r => r.status === statusFilter);
-            }
-            
-            reservasTbody.innerHTML = filteredReservas.map(reserva => `
-                <tr>
-                    <td>${reserva.id}</td>
-                    <td>${reserva.cliente}</td>
-                    <td>${reserva.data} ${reserva.hora}</td>
-                    <td>${reserva.mesa} (${reserva.pessoas}p)</td>
-                    <td>${reserva.telefone}</td>
-                    <td><span class="status ${reserva.status}">${reserva.status.toUpperCase()}</span></td>
-                    <td>
-                        <button class="btn-small confirmar" data-id="${reserva.id}">Confirmar</button>
-                        <button class="btn-small cancelar" data-id="${reserva.id}">Cancelar</button>
-                        <button class="btn-small editar" data-id="${reserva.id}">Editar</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
+        ordersTbody.innerHTML = mockData.recentOrders.map(order => `
+            <tr>
+                <td>${order.id}</td>
+                <td>${order.client}</td>
+                <td>${order.items} pizzas</td>
+                <td>R$ ${order.total}</td>
+                <td><span class="status ${order.status}">${order.status.toUpperCase()}</span></td>
+                <td>${order.date}</td>
+            </tr>
+        `).join('');
     }
 
-
-    // Real-time Refresh - FULL (all sections)
+    // Real-time Refresh
     let refreshInterval;
     function startRealTime() {
         refreshInterval = setInterval(() => {
             updateKPIs();
-            
-            // Simulate stock changes
-            mockData.stock.forEach(item => {
-                if (Math.random() > 0.8) item.current -= 1;
-            });
-            
-            // Simulate new pedidos
-            if (Math.random() > 0.6) {
-                mockData.recentOrders.unshift({
-                    id: '#PP' + (100 + mockData.recentOrders.length).toString().padStart(3, '0'),
-                    cliente: 'Cliente #' + Math.floor(Math.random()*100),
-                    telefone: '(11)9' + Math.floor(10000000 + Math.random()*90000000),
-                    items: Math.floor(1 + Math.random()*4),
-                    total: (50 + Math.random()*200).toFixed(2),
-                    status: 'pendente',
-                    data: new Date(Date.now() + Math.random()*86400000).toISOString().slice(0,16).replace('T', ' ')
-                });
-            }
-            
-            // Simulate new reservas
-            if (Math.random() > 0.7) {
-                mockData.reservas.unshift({
-                    id: 'R' + (100 + mockData.reservas.length).toString().padStart(3, '0'),
-                    cliente: 'Novo Cliente ' + Math.floor(Math.random()*100),
-                    data: new Date(Date.now() + Math.random()*86400000).toISOString().split('T')[0],
-                    hora: ['18:00', '19:00', '20:00', '21:00'][Math.floor(Math.random()*4)],
-                    pessoas: [2,4,6,8][Math.floor(Math.random()*4)],
-                    mesa: ['Casal', 'Família', 'VIP', 'Varanda'][Math.floor(Math.random()*4)],
-                    telefone: '(11)9' + Math.floor(10000000 + Math.random()*90000000),
-                    status: 'pendente',
-                    obs: ''
-                });
-            }
-            
+            // Simulate stock change
+            mockData.stock[0].current = Math.max(0, mockData.stock[0].current - 1);
             populateTables();
-        }, 8000);
+        }, 5000);
     }
 
-
-    // Actions - Extended for ALL sections
+    // Actions
     document.addEventListener('click', function(e) {
-        // Estoque actions
-        if (e.target.classList.contains('reabastecer')) {
-            const name = e.target.dataset.name;
-            alert(`🛒 Reabastecimento automático para ${name} iniciado!`);
-            // Simulate stock increase
-            const item = mockData.stock.find(i => i.name === name);
-            if (item) item.current += 20;
-            populateTables();
+        if (e.target.classList.contains('reorder')) {
+            alert('🛒 Pedido de reabastecimento enviado! (Simulado)');
         }
-        if (e.target.classList.contains('ajustar')) {
-            const name = e.target.dataset.name;
-            const novoEstoque = prompt(`Estoque atual para ${name}: Ajustar para quanto?`);
-            if (novoEstoque && !isNaN(novoEstoque)) {
-                const item = mockData.stock.find(i => i.name === name);
-                if (item) item.current = parseInt(novoEstoque);
-                populateTables();
-            }
-        }
-        
-        // Pedidos actions
-        if (e.target.classList.contains('preparar')) {
-            const id = e.target.dataset.id;
-            const pedido = mockData.recentOrders.find(p => p.id === id);
-            if (pedido) {
-                pedido.status = 'preparando';
-                alert(`🔥 Pedido ${id} em preparação!`);
-                populateTables();
-            }
-        }
-        if (e.target.classList.contains('entregar')) {
-            const id = e.target.dataset.id;
-            const pedido = mockData.recentOrders.find(p => p.id === id);
-            if (pedido) {
-                pedido.status = 'entregue';
-                alert(`✅ Pedido ${id} entregue!`);
-                populateTables();
-            }
-        }
-        
-        // Reservas actions (existing)
-        if (e.target.classList.contains('confirmar')) {
-            const id = e.target.dataset.id;
-            const reserva = mockData.reservas.find(r => r.id === id);
-            if (reserva) {
-                reserva.status = 'confirmada';
-                alert(`✅ Reserva ${id} confirmada! WhatsApp enviado para ${reserva.telefone}`);
-                populateTables();
-            }
-        }
-        if (e.target.classList.contains('cancelar')) {
-            const id = e.target.dataset.id;
-            const reserva = mockData.reservas.find(r => r.id === id);
-            if (reserva) {
-                reserva.status = 'cancelada';
-                alert(`❌ Reserva ${id} cancelada.`);
-                populateTables();
-            }
-        }
-        if (e.target.classList.contains('editar')) {
-            const id = e.target.dataset.id;
-            alert(`✏️ Editar ${id} - Modal em desenvolvimento`);
+        if (e.target.classList.contains('btn-small')) {
+            alert('✏️ Edição de item iniciada (demo)');
         }
     });
-    
-    // Global Filters - Works for all sections
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('filter-btn')) {
-            e.target.closest('.filters-bar').querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
-            populateTables();
-        }
-    });
-    
-    // Global Search & Status Filter
-    document.addEventListener('input', function(e) {
-        if (e.target.classList.contains('search-input') || e.target.classList.contains('status-filter')) {
-            setTimeout(populateTables, 300);
-        }
-    });
-    
-    // Search & Status Filter
-    document.addEventListener('input', function(e) {
-        if (e.target.classList.contains('search-input') || e.target.classList.contains('status-filter')) {
-            setTimeout(populateTables, 300);
-        }
-    });
-
 
     // Navbar integration - sidebar
     document.querySelector('.nav-item[data-section="dashboard"]').classList.add('active');

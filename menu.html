@@ -59,115 +59,224 @@
                 <div class="section-intro">
                     <p>Massas napolitanas assadas a lenha | Ingredientes importados | Bordas recheadas +R$8</p>
                 </div>
-                <div class="menu-tabs">
-                    <button class="tab-button active" data-category="salgadas"><i class="fas fa-pepper-hot"></i> Salgadas</button>
-                    <button class="tab-button" data-category="doces"><i class="fas fa-heart"></i> Doces</button>
-                    <button class="tab-button" data-category="especiais"><i class="fas fa-crown"></i> Especiais</button>
+
+<div class="pizza-grid">
+                <div class="pizza-card" data-type="tradicional">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" alt="Margherita">
+                    <h3>Margherita ⭐⭐⭐⭐⭐</h3>
+                    <p>Molho de tomate, muçarela, tomate e manjericão fresco</p>
+                    <span class="price">R$ 45<small> | Grande R$ 55</small></span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
                 </div>
-                <div class="menu-grid">
-                    <!-- Salgadas -->
-                    <div class="menu-card" data-category="salgadas">
-                        <div class="menu-image">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&h=375&fit=crop" alt="Pizza Margherita">
-                        </div>
-                        <div class="menu-info">
-                            <h3>Margherita Clássica</h3>
-                            <p>Molho de tomate San Marzano, muçarela fior di latte, manjericão fresco</p>
-                            <div class="price">R$ 48<small>,90</small></div>
-                            <button class="add-cart-btn" data-name="Margherita" data-price="48.90">
-                                <i class="fas fa-cart-plus"></i> Adicionar
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="menu-card" data-category="salgadas">
-                        <div class="menu-image">
-                            <img loading="lazy" src="imagem/Calabresa.jpg" alt="Pizza Calabresa">
-                        </div>
-                        <div class="menu-info">
-                            <h3>Calabresa Especial</h3>
-                            <p>Linguiça calabresa artesanal, muçarela, cebola roxa caramelizada, orégano</p>
-                            <div class="price">R$ 52<small>,90</small></div>
-                            <button class="add-cart-btn" data-name="Calabresa" data-price="52.90">
-                                <i class="fas fa-cart-plus"></i> Adicionar
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="menu-card" data-category="salgadas">
-                        <div class="menu-image">
-                            <img loading="lazy" src="imagem/Frango BBQ.jpg" alt="Pizza BBQ">
-                        </div>
-                        <div class="menu-info">
-
-                            <h3>Pizza Frango com Catupiry</h3>
-                            <p>Frango desfiado, catupiry cremoso, muçarela, orégano</p>
-
-                            <div class="price">R$ 59<small>,90</small></div>
-                            <button class="add-cart-btn" data-name="Frango BBQ" data-price="59.90">
-                                <i class="fas fa-cart-plus"></i> Adicionar
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="menu-card" data-category="salgadas">
-                        <div class="menu-image">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1603048297194-8f7fda3edc05?w=500&h=375&fit=crop" alt="Pizza Vegetariana">
-                        </div>
-                        <div class="menu-info">
-                            <h3>Vegetariana Delícia</h3>
-                            <p>Abobrinha grelhada, berinjela em conserva, pimentão assado, muçarela de búfala</p>
-                            <div class="price">R$ 49<small>,90</small></div>
-                            <button class="add-cart-btn" data-name="Vegetariana" data-price="49.90">
-                                <i class="fas fa-cart-plus"></i> Adicionar
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Doces -->
-                    <div class="menu-card" data-category="doces">
-                        <div class="menu-image">
-                            <img loading="lazy" src="imagem/chocolate.jpg" alt="Pizza Chocolate">
-                        </div>
-                        <div class="menu-info">
-                            <h3>Chocolate com Morango</h3>
-                            <p>Chocolate belga meio amargo, morangos frescos, granulado belga crocante</p>
-                            <div class="price">R$ 44<small>,90</small></div>
-                            <button class="add-cart-btn" data-name="Chocolate Morango" data-price="44.90">
-                                <i class="fas fa-cart-plus"></i> Adicionar
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Especiais -->
-                    <div class="menu-card" data-category="especiais">
-                        <div class="menu-image">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1518843825959-e63ddf7e0510?w=500&h=375&fit=crop" alt="Pizza Prime Especial">
-                        </div>
-                        <div class="menu-info">
-                            <h3>⭐ Prime Especial</h3>
-                            <p>Frango, catupiry, mussarela, milho verde, ervilhas, batata palha crocante</p>
-                            <div class="price">R$ 62<small>,90</small></div>
-                            <button class="add-cart-btn" data-name="Prime Especial" data-price="62.90">
-                                <i class="fas fa-cart-plus"></i> Adicionar
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="menu-card" data-category="especiais">
-                        <div class="menu-image">
-                            <img loading="lazy" src="imagem/Quatro Queijos Premium.jpg" alt="Quatro Queijos">
-                        </div>
-                        <div class="menu-info">
-                            <h3>Quatro Queijos Premium</h3>
-                            <p>Muçarela fior di latte, provolone piccante, parmesão 24 meses, gorgonzola dolce</p>
-                            <div class="price">R$ 58<small>,90</small></div>
-                            <button class="add-cart-btn" data-name="Quatro Queijos" data-price="58.90">
-                                <i class="fas fa-cart-plus"></i> Adicionar
-                            </button>
-                        </div>
-                    </div>
+                <div class="pizza-card" data-type="tradicional">
+                    <img src="https://images.unsplash.com/photo-1579586140626-516b3b07c3e4?w=400&h=300&fit=crop" alt="Calabresa">
+                    <h3>Calabresa ⭐⭐⭐⭐⭐</h3>
+                    <p>Molho de tomate, muçarela e linguiça calabresa fatiada</p>
+                    <span class="price">R$ 48<small> | Grande R$ 58</small></span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
                 </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1515549821411-138abd7d1d6f?w=400&h=300&fit=crop" alt="Quatro Queijos">
+                    <h3>Quatro Queijos ⭐⭐⭐⭐</h3>
+                    <p>Molho de tomate, muçarela, gorgonzola, catupiry e parmesão</p>
+                    <span class="price">R$ 55<small> | Grande R$ 65</small></span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1542994893-e8187e9e8c09?w=400&h=300&fit=crop" alt="Frango com Catupiry">
+                    <h3>Frango com Catupiry</h3>
+                    <p>Molho de tomate, frango desfiado e catupiry</p>
+                    <span class="price">R$ 52,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                
+                <!-- Full list continues... -->
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1542994893-e8187e9e8c09?w=400&h=300&fit=crop" alt="Portuguesa">
+                    <h3>Portuguesa</h3>
+                    <p>Molho de tomate, muçarela, presunto, ovo, cebola, pimentão e azeitonas</p>
+                    <span class="price">R$ 50,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="tradicional">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" alt="Napolitana">
+                    <h3>Napolitana</h3>
+                    <p>Molho de tomate, muçarela, tomate, orégano e parmesão</p>
+                    <span class="price">R$ 47,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="tradicional">
+                    <img src="https://images.unsplash.com/photo-1515549821411-138abd7d1d6f?w=400&h=300&fit=crop" alt="Muçarela">
+                    <h3>Muçarela</h3>
+                    <p>Molho de tomate e muçarela</p>
+                    <span class="price">R$ 42,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="tradicional">
+                    <img src="https://images.unsplash.com/photo-1542994893-e8187e9e8c09?w=400&h=300&fit=crop" alt="Atum">
+                    <h3>Atum</h3>
+                    <p>Molho de tomate, muçarela, atum e cebola</p>
+                    <span class="price">R$ 49,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" alt="Basca">
+                    <h3>Basca</h3>
+                    <p>Molho de tomate, muçarela, presunto, bacon, cebola, ovo e azeitonas</p>
+                    <span class="price">R$ 58,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="tradicional">
+                    <img src="https://images.unsplash.com/photo-1579586140626-516b3b07c3e4?w=400&h=300&fit=crop" alt="Pepperoni">
+                    <h3>Pepperoni</h3>
+                    <p>Molho de tomate, muçarela e pepperoni picante</p>
+                    <span class="price">R$ 51,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1515549821411-138abd7d1d6f?w=400&h=300&fit=crop" alt="Baiana">
+                    <h3>Baiana</h3>
+                    <p>Molho de tomate, muçarela, calabresa, pimenta e cebola</p>
+                    <span class="price">R$ 54,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1542994893-e8187e9e8c09?w=400&h=300&fit=crop" alt="Caipira">
+                    <h3>Caipira</h3>
+                    <p>Molho de tomate, frango, milho e catupiry</p>
+                    <span class="price">R$ 53,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" alt="Palmito com Azeitonas">
+                    <h3>Palmito com Azeitonas</h3>
+                    <p>Molho de tomate, muçarela, palmito e azeitonas</p>
+                    <span class="price">R$ 56,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1579586140626-516b3b07c3e4?w=400&h=300&fit=crop" alt="Moda da Casa">
+                    <h3>Moda da Casa</h3>
+                    <p>Combinação personalizada com ingredientes exclusivos</p>
+                    <span class="price">R$ 60,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1515549821411-138abd7d1d6f?w=400&h=300&fit=crop" alt="Calabresa com Catupiry">
+                    <h3>Calabresa com Catupiry</h3>
+                    <p>Molho de tomate, calabresa e catupiry</p>
+                    <span class="price">R$ 55,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1542994893-e8187e9e8c09?w=400&h=300&fit=crop" alt="Brócolis com Bacon">
+                    <h3>Brócolis com Bacon</h3>
+                    <p>Molho de tomate, muçarela, brócolis e bacon</p>
+                    <span class="price">R$ 52,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" alt="Milho com Bacon">
+                    <h3>Milho com Bacon</h3>
+                    <p>Molho de tomate, muçarela, milho e bacon</p>
+                    <span class="price">R$ 50,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1579586140626-516b3b07c3e4?w=400&h=300&fit=crop" alt="Carne Seca com Catupiry">
+                    <h3>Carne Seca com Catupiry</h3>
+                    <p>Carne seca, catupiry, cebola roxa e muçarela</p>
+                    <span class="price">R$ 59,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1515549821411-138abd7d1d6f?w=400&h=300&fit=crop" alt="Frango com Milho">
+                    <h3>Frango com Milho</h3>
+                    <p>Molho de tomate, frango, milho e muçarela</p>
+                    <span class="price">R$ 51,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="tradicional">
+                    <img src="https://images.unsplash.com/photo-1542994893-e8187e9e8c09?w=400&h=300&fit=crop" alt="Alho e Óleo">
+                    <h3>Alho e Óleo</h3>
+                    <p>Muçarela, alho frito no azeite e orégano</p>
+                    <span class="price">R$ 46,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="tradicional">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" alt="Presunto e Queijo">
+                    <h3>Presunto e Queijo</h3>
+                    <p>Muçarela, presunto e orégano</p>
+                    <span class="price">R$ 48,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1579586140626-516b3b07c3e4?w=400&h=300&fit=crop" alt="Escarola com Alho">
+                    <h3>Escarola com Alho</h3>
+                    <p>Muçarela, escarola refogada com alho e cebola</p>
+                    <span class="price">R$ 54,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1515549821411-138abd7d1d6f?w=400&h=300&fit=crop" alt="Picanha Acebolada">
+                    <h3>Picanha Acebolada</h3>
+                    <p>Tiras de picanha grelhada com cebola roxa</p>
+                    <span class="price">R$ 62,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1542994893-e8187e9e8c09?w=400&h=300&fit=crop" alt="Toscana">
+                    <h3>Toscana</h3>
+                    <p>Linguiça toscana, muçarela e cebola</p>
+                    <span class="price">R$ 57,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" alt="Filé com Gorgonzola">
+                    <h3>Filé com Gorgonzola</h3>
+                    <p>Tiras de filé, gorgonzola e muçarela</p>
+                    <span class="price">R$ 61,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1579586140626-516b3b07c3e4?w=400&h=300&fit=crop" alt="Lombo Canadense">
+                    <h3>Lombo Canadense</h3>
+                    <p>Molho de tomate, muçarela e lombo defumado</p>
+                    <span class="price">R$ 55,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1515549821411-138abd7d1d6f?w=400&h=300&fit=crop" alt="Presunto de Parma com Rúcula">
+                    <h3>Presunto de Parma com Rúcula</h3>
+                    <p>Presunto de Parma, muçarela e rúcula</p>
+                    <span class="price">R$ 63,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1542994893-e8187e9e8c09?w=400&h=300&fit=crop" alt="Queijo Brie com Damasco">
+                    <h3>Queijo Brie com Damasco</h3>
+                    <p>Queijo brie, muçarela e geleia de damasco</p>
+                    <span class="price">R$ 64,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" alt="Alho-Poró com Bacon">
+                    <h3>Alho-Poró com Bacon</h3>
+                    <p>Molho branco, alho-poró e bacon</p>
+                    <span class="price">R$ 56,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+                <div class="pizza-card" data-type="especial">
+                    <img src="https://images.unsplash.com/photo-1579586140626-516b3b07c3e4?w=400&h=300&fit=crop" alt="Tomate Seco com Rúcula">
+                    <h3>Tomate Seco com Rúcula</h3>
+                    <p>Muçarela, tomate seco e rúcula</p>
+                    <span class="price">R$ 58,00</span>
+                    <button class="details-btn">Adicionar ao Pedido</button>
+                </div>
+            </div>
+            <div class="load-more-container">
+                <button id="load-more" class="btn">Carregar Mais Sabores</button>
+            </div>
                 <div class="menu-note">
                     <i class="fas fa-info-circle"></i>
                     <p>Preços pizza média (8 fatias) | Borda recheada +R$12 | Delivery grátis acima R$60</p>
@@ -185,7 +294,8 @@
                 <div class="menu-grid">
                     <div class="menu-card small">
                         <div class="menu-image">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=300&fit=crop" alt="Coca-Cola">
+                            <img loading="lazy" src="imagem/Sabores e Bebida/Coca-Cola 350ml.jpg" alt="Coca-Cola">
+
                         </div>
                         <div class="menu-info">
                             <h3>Coca-Cola 350ml</h3>
@@ -194,7 +304,8 @@
                     </div>
                     <div class="menu-card small">
                         <div class="menu-image">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1512568400610-3f3f8f710db9?w=300&h=300&fit=crop" alt="Cerveja Brahma">
+                            <img loading="lazy" src="imagem/Sabores e Bebida/Cerveja Brahma 600ml.jpg" alt="Cerveja Brahma">
+
                         </div>
                         <div class="menu-info">
                             <h3>Cerveja Brahma 600ml</h3>
@@ -203,7 +314,8 @@
                     </div>
                     <div class="menu-card small">
                         <div class="menu-image">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1542994983-9c358067390b?w=300&h=300&fit=crop" alt="Guaraná">
+                            <img loading="lazy" src="imagem/Sabores e Bebida/Guaraná Antarctica 350ml.webp" alt="Guaraná">
+
                         </div>
                         <div class="menu-info">
                             <h3>Guaraná Antarctica 350ml</h3>
@@ -212,7 +324,8 @@
                     </div>
                     <div class="menu-card small">
                         <div class="menu-image">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1579586337278-4fab0d46a685?w=300&h=300&fit=crop" alt="Suco Natural">
+                            <img loading="lazy" src="imagem/Sabores e Bebida/Suco Laranja Natural 500ml.jpg" alt="Suco Natural">
+
                         </div>
                         <div class="menu-info">
                             <h3>Suco Laranja Natural 500ml</h3>
@@ -221,7 +334,8 @@
                     </div>
                     <div class="menu-card small">
                         <div class="menu-image">
-                            <img loading="lazy" src="https://images.unsplash.com/photo-1519125323398-675f398ad308?w=300&h=300&fit=crop" alt="Sorvete">
+                            <img loading="lazy" src="imagem/Sabores e Bebida/Sorvete Italiano 3 Bolas.jpg" alt="Sorvete">
+
                         </div>
                         <div class="menu-info">
                             <h3>Sorvete Italiano 3 Bolas</h3>

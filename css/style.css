@@ -384,6 +384,10 @@ section.visible {
 }
 
 /* Admin Floating Icon + Modal */
+.floating-admin-icon:not([href="admin.html"]) {
+    opacity: 0.1;
+}
+
 .floating-admin-icon {
     position: fixed;
     bottom: 30px;
@@ -399,7 +403,7 @@ section.visible {
     box-shadow: 0 15px 40px rgba(255,71,87,0.5);
     transition: all 0.3s ease;
     z-index: 9999;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
 }

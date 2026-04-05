@@ -38,7 +38,14 @@ document.addEventListener('DOMContentLoaded', function() {
         topProducts: {
             labels: ['Margherita', 'Calabresa', 'Frango BBQ', 'Quatro Queijos', 'Chocolate'],
             data: [45, 38, 25, 22, 18]
-        }
+        },
+        reservas: [
+            { id: '#R001', cliente: 'Ana Silva', mesa: 'Mesa 5', datahora: '2024-10-20 19:00', pessoas: 4, status: 'pendente' },
+            { id: '#R002', cliente: 'Carlos Lima', mesa: 'VIP 12', datahora: '2024-10-20 21:00', pessoas: 8, status: 'confirmada' },
+            { id: '#R003', cliente: 'Mariana Costa', mesa: 'Mesa 1', datahora: '2024-10-21 20:30', pessoas: 2, status: 'pendente' },
+            { id: '#R004', cliente: 'Lucas Santos', mesa: 'Mesa 8', datahora: '2024-10-20 18:30', pessoas: 6, status: 'cancelada' },
+            { id: '#R005', cliente: 'Juliana Oliveira', mesa: 'Varanda 15', datahora: 'Hoje 19:30', pessoas: 4, status: 'confirmada' }
+        ]
     };
 
     // Charts
@@ -177,12 +184,29 @@ document.addEventListener('DOMContentLoaded', function() {
         const kpis = document.querySelectorAll('[data-metric]');
         kpis.forEach(kpi => {
             const metric = kpi.dataset.metric;
-            let value = mockData.kpis[metric];
+            let value;
+            
             if (metric === 'revenue' || metric === 'profit') {
-                value += (Math.random() - 0.5) * 1000;
+                value = mockData.kpis[metric] + (Math.random() - 0.5) * 1000;
                 kpi.innerHTML = 'R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '<small>,00</small>';
+            } else if (metric === 'occupancy') {
+                kpi.textContent = Math.floor(Math.random() * 30 + 60) + '%';
             } else {
-                value += Math.floor(Math.random() * 3) - 1;
+                value = mockData.kpis[metric] + Math.floor(Math.random() * 3) - 1;
+                kpi.textContent = Math.max(0, value);
+            }
+        });
+        kpis.forEach(kpi => {
+            const metric = kpi.dataset.metric;
+            let value;
+            
+            if (metric === 'revenue' || metric === 'profit') {
+                value = mockData.kpis[metric] + (Math.random() - 0.5) * 1000;
+                kpi.innerHTML = 'R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '<small>,00</small>';
+            } else if (metric === 'occupancy') {
+                kpi.textContent = Math.floor(Math.random() * 30 + 60) + '%';
+            } else {
+                value = mockData.kpis[metric] + Math.floor(Math.random() * 3) - 1;
                 kpi.textContent = Math.max(0, value);
             }
         });
@@ -201,6 +225,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td><button class="btn-small ${item.status === 'low' ? 'reorder' : ''}">${item.status === 'low' ? 'Reabastecer' : 'Editar'}</button></td>
             </tr>
         `).join('');
+
+        // Reservas Table
+        const reservasTbody = document.querySelector('#reserva .reserva-table tbody');
+        if (reservasTbody) {
+            reservasTbody.innerHTML = mockData.reservas.map(reserva => `
+                <tr>
+                    <td>${reserva.id}</td>
+                    <td>${reserva.cliente}</td>
+                    <td>${reserva.mesa}</td>
+                    <td>${reserva.datahora}</td>
+                    <td>${reserva.pessoas}</td>
+                    <td><span class="status ${reserva.status}">${reserva.status.toUpperCase()}</span></td>
+                    <td>
+                        <button class="btn-small btn-confirm" ${reserva.status !== 'pendente' ? 'style="display: none;"' : ''}>Confirmar</button>
+                        <button class="btn-small btn-cancel ml-2">Cancelar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
         // Orders Table
         const ordersTbody = document.querySelector('#pedidos tbody');
@@ -232,8 +275,32 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.classList.contains('reorder')) {
             alert('🛒 Pedido de reabastecimento enviado! (Simulado)');
         }
-        if (e.target.classList.contains('btn-small')) {
-            alert('✏️ Edição de item iniciada (demo)');
+        if (e.target.classList.contains('btn-small') && !e.target.closest('.reserva-table')) {
+            alert('✏️ Edição iniciada (demo)');
+        }
+        
+        // Reservas actions
+        if (e.target.classList.contains('btn-confirm')) {
+            const statusEl = e.target.closest('tr').querySelector('.status');
+            statusEl.textContent = 'CONFIRMADA';
+            statusEl.className = 'status confirmed';
+            e.target.style.display = 'none';
+            alert('✅ Reserva confirmada!');
+        }
+        if (e.target.classList.contains('btn-cancel')) {
+            if (confirm('Cancelar reserva?')) {
+                const statusEl = e.target.closest('tr').querySelector('.status');
+                statusEl.textContent = 'CANCELADA';
+                statusEl.className = 'status canceled';
+                alert('❌ Reserva cancelada.');
+            }
+        }
+        
+        // Update mesa
+        if (e.target.id === 'update-mesa') {
+            const mesa = document.getElementById('mesa-select').value;
+            const status = document.getElementById('mesa-status').value;
+            alert(`🪑 Mesa ${mesa} status: ${status}`);
         }
     });
 

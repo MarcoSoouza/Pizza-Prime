@@ -1,15 +1,11 @@
-# Pizza Prime - TODO Tracker
+# TODO List for Pizza Prime Updates
 
-## ✅ Concluído
-- [x] Upload atualizações GitHub + Site (GitHub Pages)
-- [x] Adicionar ícone WhatsApp floating bottom-left todas páginas (https://wa.me/5511999999999)
-- [x] Admin icon: quase invisível público (opacity 0.1), visível hover e full admin.html
+## Completed Steps
+- [x] Stage changes with `git add .`
+- [x] Commit updates with descriptive message  
+- [x] Push to GitHub (`git push origin main`)
 
-## 🔄 Em Progresso
-- Testar site live: https://marcosoouza.github.io/Pizza-Prime/
+## Pending
+- Verify live site: https://marcosoouza.github.io/Pizza-Prime/
 
-## ⏳ Próximos
-- Confirmar número WhatsApp real
-- Mobile responsive icons
-- Analytics integração
-
+*Last updated after Git push.*

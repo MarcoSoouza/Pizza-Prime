@@ -5,7 +5,7 @@
 - [x] Commit updates with descriptive message  
 - [x] Push to GitHub (`git push origin main`)
 
-## Pending
-- Verify live site: https://marcosoouza.github.io/Pizza-Prime/
+## Completed
+*Todas as atualizações enviadas com sucesso para GitHub. Site live atualizado: https://marcosoouza.github.io/Pizza-Prime/*
 
-*Last updated after Git push.*
+**Próximos passos:** Nenhum pendente.

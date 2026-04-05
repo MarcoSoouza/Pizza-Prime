@@ -39,13 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
             labels: ['Margherita', 'Calabresa', 'Frango BBQ', 'Quatro Queijos', 'Chocolate'],
             data: [45, 38, 25, 22, 18]
         },
-        reservas: [
-            { id: '#R001', cliente: 'Ana Silva', mesa: 'Mesa 5', datahora: '2024-10-20 19:00', pessoas: 4, status: 'pendente' },
-            { id: '#R002', cliente: 'Carlos Lima', mesa: 'VIP 12', datahora: '2024-10-20 21:00', pessoas: 8, status: 'confirmada' },
-            { id: '#R003', cliente: 'Mariana Costa', mesa: 'Mesa 1', datahora: '2024-10-21 20:30', pessoas: 2, status: 'pendente' },
-            { id: '#R004', cliente: 'Lucas Santos', mesa: 'Mesa 8', datahora: '2024-10-20 18:30', pessoas: 6, status: 'cancelada' },
-            { id: '#R005', cliente: 'Juliana Oliveira', mesa: 'Varanda 15', datahora: 'Hoje 19:30', pessoas: 4, status: 'confirmada' }
-        ]
+        reservas: [] // Pronto para banco de dados
     };
 
     // Charts
@@ -196,20 +190,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 kpi.textContent = Math.max(0, value);
             }
         });
-        kpis.forEach(kpi => {
-            const metric = kpi.dataset.metric;
-            let value;
-            
-            if (metric === 'revenue' || metric === 'profit') {
-                value = mockData.kpis[metric] + (Math.random() - 0.5) * 1000;
-                kpi.innerHTML = 'R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '<small>,00</small>';
-            } else if (metric === 'occupancy') {
-                kpi.textContent = Math.floor(Math.random() * 30 + 60) + '%';
-            } else {
-                value = mockData.kpis[metric] + Math.floor(Math.random() * 3) - 1;
-                kpi.textContent = Math.max(0, value);
-            }
-        });
     }
 
     // Populate Tables
@@ -270,7 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
 
-    // Actions
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('reorder')) {
             alert('🛒 Pedido de reabastecimento enviado! (Simulado)');

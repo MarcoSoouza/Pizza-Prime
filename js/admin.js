@@ -1,25 +1,13 @@
-// Admin Dashboard JS | Pizza Prime - Professional Panel
-// Password: 'admin123' | Mock Data + Chart.js + Real-time
+// Admin Dashboard JS | Pizza Prime - Professional Panel - FIXED
+// Seção Reservas limpa para banco de dados | Erros TS corrigidos
 
-// console.log('admin.js starting...');
 document.addEventListener('DOMContentLoaded', function() {
-    // console.log('DOM fully loaded');
-    // Check if already logged in (fix robusto)
-    // Direct access - no login check needed
-
-    // Elements
-    const logoutBtn = document.getElementById('logoutBtn');
     const sections = document.querySelectorAll('.admin-section');
     const navLinks = document.querySelectorAll('.sidebar-nav .nav-item');
 
-    // Mock Data
-    let mockData = {
-        kpis: {
-            revenue: 47892.43,
-            orders: 156,
-            profit: 18745.20,
-            lowstock: 3
-        },
+    // Mock Data (limpo para banco)
+    const mockData = {
+        kpis: { revenue: 47892.43, orders: 156, profit: 18745.20, lowstock: 3 },
         stock: [
             { name: 'Margherita Premium', current: 12, min: 20, status: 'low' },
             { name: 'Calabresa Especial', current: 45, min: 20, status: 'ok' },
@@ -32,105 +20,72 @@ document.addEventListener('DOMContentLoaded', function() {
             { id: '#PP001', client: 'João Silva', items: 2, total: 128.90, status: 'entregue', date: '2024-10-15 19:32' },
             { id: '#PP002', client: 'Maria Oliveira', items: 3, total: 189.70, status: 'preparando', date: '2024-10-15 20:15' },
             { id: '#PP003', client: 'Pedro Santos', items: 1, total: 59.90, status: 'entregue', date: '2024-10-15 18:45' }
-            // More populated dynamically
         ],
-        salesTrend: [3200, 4500, 3800, 5200, 6100, 5800, 7200], // Last 7 days
-        topProducts: {
-            labels: ['Margherita', 'Calabresa', 'Frango BBQ', 'Quatro Queijos', 'Chocolate'],
-            data: [45, 38, 25, 22, 18]
-        },
-        reservas: [] // Pronto para banco de dados
+        salesTrend: [3200, 4500, 3800, 5200, 6100, 5800, 7200],
+        topProducts: { labels: ['Margherita', 'Calabresa', 'Frango BBQ', 'Quatro Queijos', 'Chocolate'], data: [45, 38, 25, 22, 18] },
+        reservas: [] // ✅ Pronto para banco de dados
     };
 
-    // Charts
     let ordersChart, salesChart, productsChart;
 
-    // NO LOGIN - direct access
-
-    // Init Dashboard - Direct access (no login needed)
     function initDashboard() {
-        console.log('Initializing dashboard...');
         document.querySelector('.admin-layout').style.display = 'flex';
         document.querySelector('.admin-main').style.display = 'block';
         updateKPIs();
         populateTables();
+        initCharts();
         startRealTime();
-        setTimeout(() => initCharts(), 500);
+        initNav();
+        showFirstSection();
     }
 
-    // Logout (simplified)
-    function hideDashboard() {
-        localStorage.removeItem('pizzaAdminLoggedIn');
-        document.querySelector('.admin-layout').style.display = 'none';
-        if (ordersChart) ordersChart.destroy();
-        if (salesChart) salesChart.destroy();
-        if (productsChart) productsChart.destroy();
+    function initNav() {
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (!targetSection) return console.error('Section not found:', targetId);
+
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                sections.forEach(s => {
+                    s.style.display = 'none';
+                    s.classList.remove('active');
+                });
+                
+                targetSection.style.display = 'block';
+                targetSection.classList.add('active');
+            });
+        });
     }
 
-    // logoutBtn.addEventListener('click', hideDashboard); // Removed - now direct link
-
-    // Initialize on load
-    initDashboard();
-
-    // Nav Sections
-
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
-            if (!targetSection) {
-                console.error('Section not found:', targetId);
-                return;
-            }
-
-            // Update active nav
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Hide all sections first (clear inline styles)
+    function showFirstSection() {
+        if (sections.length > 0) {
             sections.forEach(s => {
                 s.style.display = 'none';
                 s.classList.remove('active');
             });
-            
-            // Show target section
-            targetSection.style.display = 'block';
-            targetSection.classList.add('active');
-        });
-    });
-
-    // Auto-show dashboard if no active section (fallback)
-    if (sections.length > 0) {
-        sections.forEach(s => {
-            s.style.display = 'none';
-            s.classList.remove('active');
-        });
-        const firstSection = sections[0];
-        firstSection.style.display = 'block';
-        firstSection.classList.add('active');
+            sections[0].style.display = 'block';
+            sections[0].classList.add('active');
+            document.querySelector('.nav-item[data-section="dashboard"]').classList.add('active');
+        }
     }
 
-    // Charts Init
     function initCharts() {
-        // Orders Status Doughnut
         const ordersCtx = document.getElementById('ordersChart')?.getContext('2d');
         if (ordersCtx) {
             ordersChart = new Chart(ordersCtx, {
                 type: 'doughnut',
                 data: {
                     labels: ['Entregue', 'Preparando', 'Pendente'],
-                    datasets: [{
-                        data: [120, 25, 11],
-                        backgroundColor: ['#28a745', '#ffc107', '#dc3545']
-                    }]
+                    datasets: [{ data: [120, 25, 11], backgroundColor: ['#28a745', '#ffc107', '#dc3545'] }]
                 },
-                options: {
-                    responsive: true,
-                    plugins: { legend: { position: 'bottom' } }
-                }
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
             });
         }
 
-        // Sales Line
         const salesCtx = document.getElementById('salesChart')?.getContext('2d');
         if (salesCtx) {
             salesChart = new Chart(salesCtx, {
@@ -150,30 +105,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Top Products Bar
         const productsCtx = document.getElementById('productsChart')?.getContext('2d');
         if (productsCtx) {
             productsChart = new Chart(productsCtx, {
                 type: 'bar',
                 data: {
                     labels: mockData.topProducts.labels,
-                    datasets: [{
-                        label: '% Vendas',
-                        data: mockData.topProducts.data,
-                        backgroundColor: '#ff4757'
-                    }]
+                    datasets: [{ label: '% Vendas', data: mockData.topProducts.data, backgroundColor: '#ff4757' }]
                 },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: { beginAtZero: true, max: 50 }
-                    }
-                }
+                options: { responsive: true, scales: { y: { beginAtZero: true, max: 50 } } }
             });
         }
     }
 
-    // Update KPIs (Randomize for demo)
     function updateKPIs() {
         const kpis = document.querySelectorAll('[data-metric]');
         kpis.forEach(kpi => {
@@ -192,98 +136,76 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Populate Tables
     function populateTables() {
-        // Stock Table
+        // Stock
         const stockTbody = document.querySelector('#estoque tbody');
-        stockTbody.innerHTML = mockData.stock.map(item => `
-            <tr class="${item.status}">
-                <td>${item.name}</td>
-                <td>${item.current}</td>
-                <td>${item.min}</td>
-                <td><span class="status ${item.status}">${item.status === 'low' ? '🔴 Baixo' : '🟢 OK'}</span></td>
-                <td><button class="btn-small ${item.status === 'low' ? 'reorder' : ''}">${item.status === 'low' ? 'Reabastecer' : 'Editar'}</button></td>
-            </tr>
-        `).join('');
-
-        // Reservas Table
-        const reservasTbody = document.querySelector('#reserva .reserva-table tbody');
-        if (reservasTbody) {
-            reservasTbody.innerHTML = mockData.reservas.map(reserva => `
-                <tr>
-                    <td>${reserva.id}</td>
-                    <td>${reserva.cliente}</td>
-                    <td>${reserva.mesa}</td>
-                    <td>${reserva.datahora}</td>
-                    <td>${reserva.pessoas}</td>
-                    <td><span class="status ${reserva.status}">${reserva.status.toUpperCase()}</span></td>
-                    <td>
-                        <button class="btn-small btn-confirm" ${reserva.status !== 'pendente' ? 'style="display: none;"' : ''}>Confirmar</button>
-                        <button class="btn-small btn-cancel ml-2">Cancelar</button>
-                    </td>
+        if (stockTbody) {
+            stockTbody.innerHTML = mockData.stock.map(item => `
+                <tr class="${item.status}">
+                    <td>${item.name}</td>
+                    <td>${item.current}</td>
+                    <td>${item.min}</td>
+                    <td><span class="status ${item.status}">${item.status === 'low' ? '🔴 Baixo' : '🟢 OK'}</span></td>
+                    <td><button class="btn-small ${item.status === 'low' ? 'reorder' : ''}">${item.status === 'low' ? 'Reabastecer' : 'Editar'}</button></td>
                 </tr>
             `).join('');
         }
 
-        // Orders Table
+        // Reservas (limpa)
+        const reservasTbody = document.querySelector('#reserva .reserva-table tbody');
+        if (reservasTbody) {
+            reservasTbody.innerHTML = '<tr><td colspan="7" class="text-center">Aguardando dados do banco de dados...</td></tr>';
+        }
+
+        // Orders
         const ordersTbody = document.querySelector('#pedidos tbody');
-        ordersTbody.innerHTML = mockData.recentOrders.map(order => `
-            <tr>
-                <td>${order.id}</td>
-                <td>${order.client}</td>
-                <td>${order.items} pizzas</td>
-                <td>R$ ${order.total}</td>
-                <td><span class="status ${order.status}">${order.status.toUpperCase()}</span></td>
-                <td>${order.date}</td>
-            </tr>
-        `).join('');
+        if (ordersTbody) {
+            ordersTbody.innerHTML = mockData.recentOrders.map(order => `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.client}</td>
+                    <td>${order.items} pizzas</td>
+                    <td>R$ ${order.total}</td>
+                    <td><span class="status ${order.status}">${order.status.toUpperCase()}</span></td>
+                    <td>${order.date}</td>
+                </tr>
+            `).join('');
+        }
     }
 
-    // Real-time Refresh
-    let refreshInterval;
     function startRealTime() {
-        refreshInterval = setInterval(() => {
+        setInterval(() => {
             updateKPIs();
-            // Simulate stock change
             mockData.stock[0].current = Math.max(0, mockData.stock[0].current - 1);
             populateTables();
         }, 5000);
     }
 
+    // Event Listeners
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('reorder')) {
-            alert('🛒 Pedido de reabastecimento enviado! (Simulado)');
-        }
-        if (e.target.classList.contains('btn-small') && !e.target.closest('.reserva-table')) {
-            alert('✏️ Edição iniciada (demo)');
-        }
-        
-        // Reservas actions
-        if (e.target.classList.contains('btn-confirm')) {
+            alert('🛒 Pedido de reabastecimento enviado!');
+        } else if (e.target.classList.contains('btn-small') && !e.target.closest('.reserva-table')) {
+            alert('✏️ Edição iniciada!');
+        } else if (e.target.classList.contains('btn-confirm')) {
             const statusEl = e.target.closest('tr').querySelector('.status');
             statusEl.textContent = 'CONFIRMADA';
             statusEl.className = 'status confirmed';
             e.target.style.display = 'none';
-            alert('✅ Reserva confirmada!');
-        }
-        if (e.target.classList.contains('btn-cancel')) {
-            if (confirm('Cancelar reserva?')) {
+            alert('✅ Confirmada!');
+        } else if (e.target.classList.contains('btn-cancel')) {
+            if (confirm('Cancelar?')) {
                 const statusEl = e.target.closest('tr').querySelector('.status');
                 statusEl.textContent = 'CANCELADA';
                 statusEl.className = 'status canceled';
-                alert('❌ Reserva cancelada.');
+                alert('❌ Cancelada!');
             }
-        }
-        
-        // Update mesa
-        if (e.target.id === 'update-mesa') {
+        } else if (e.target.id === 'update-mesa') {
             const mesa = document.getElementById('mesa-select').value;
             const status = document.getElementById('mesa-status').value;
-            alert(`🪑 Mesa ${mesa} status: ${status}`);
+            alert(`🪑 Mesa ${mesa}: ${status}`);
         }
     });
 
-    // Navbar integration - sidebar
-    document.querySelector('.nav-item[data-section="dashboard"]').classList.add('active');
+    initDashboard();
 });
-

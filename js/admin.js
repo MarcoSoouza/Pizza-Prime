@@ -57,8 +57,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 targetSection.style.display = 'block';
                 targetSection.classList.add('active');
+                
+                // Close sidebar on mobile after nav click
+                if (window.innerWidth <= 1200) {
+                    document.querySelector('.admin-sidebar').classList.remove('open');
+                }
             });
         });
+        
+        // Mobile sidebar toggle
+        const toggleBtn = document.querySelector('.sidebar-toggle');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function() {
+                const sidebar = document.querySelector('.admin-sidebar');
+                sidebar.classList.toggle('open');
+            });
+        }
     }
 
     function showFirstSection() {

@@ -773,15 +773,99 @@ input:checked + .slider:before {
 /* Responsive Ultra */
 @media (max-width: 1200px) {
     .admin-main {
-        margin-left: 0;
+        margin-left: 0 !important;
     }
     
     .admin-sidebar {
         transform: translateX(-100%);
+        z-index: 999;
     }
     
     .admin-sidebar.open {
         transform: translateX(0);
+    }
+
+    .sidebar-toggle {
+        display: block !important;
+    }
+
+    .kpi-grid, .charts-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem;
+    }
+
+    .admin-table {
+        font-size: 0.85rem;
+    }
+
+    .admin-table th, .admin-table td {
+        padding: 1rem 0.5rem;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1rem;
+    }
+
+    .kpi-card {
+        padding: 1.5rem;
+    }
+
+    .kpi-value {
+        font-size: 2rem !important;
+    }
+
+    .page-title {
+        font-size: 1.4rem;
+    }
+
+    .admin-header {
+        padding: 1rem;
+    }
+
+    .header-right {
+        gap: 1rem;
+    }
+
+    .nav-item span:not(.badge) {
+        display: none;
+    }
+
+    .nav-item {
+        justify-content: center;
+        gap: 0;
+        padding: 1.5rem;
+    }
+
+    .management-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .btn-large {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .table-management {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .kpi-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8rem;
+    }
+
+    .admin-section h1 {
+        font-size: 2rem;
     }
 }
 

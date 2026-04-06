@@ -289,6 +289,41 @@ h2::after {
     margin-bottom: 1rem;
 }
 
+/* Margherita Premium Enhancements */
+.menu-card.margherita {
+    box-shadow: 0 25px 80px rgba(255, 193, 7, 0.3);
+    border: 3px solid rgba(255, 215, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-card.margherita::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, gold, #ff4757, gold);
+    z-index: 2;
+}
+
+.menu-card.margherita .menu-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+}
+
+.menu-card.margherita .menu-image img {
+    transition: all 0.4s ease;
+    filter: brightness(1.05) contrast(1.1);
+}
+
+.menu-card.margherita:hover .menu-image img {
+    transform: scale(1.1);
+    filter: brightness(1.15) contrast(1.2);
+}
+
 .menu-item h3,
 .menu-card h3 {
     font-size: 1.5rem;
@@ -326,6 +361,48 @@ h2::after {
     box-shadow: 0 10px 25px rgba(40,167,69,0.4);
 }
 
+/* Premium button for Margherita */
+.menu-card.margherita .add-cart-btn {
+    background: linear-gradient(135deg, #ffd700, #ffed4a, #ffaa00);
+    color: #333;
+    font-weight: 700;
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+}
+
+.menu-card.margherita .add-cart-btn:hover {
+    box-shadow: 0 12px 35px rgba(255, 215, 0, 0.6);
+    transform: translateY(-3px) scale(1.02);
+}
+
+/* Glowing popular badge */
+.menu-card.margherita .badge.popular {
+    background: linear-gradient(135deg, gold, #ffed4a);
+    color: #333;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+.menu-card.margherita .price.large {
+    color: #ffd700 !important;
+    text-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+}
+
+/* Steam effect overlay */
+.menu-card.margherita .menu-image::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+    height: 20%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: steamRise 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
 .cart-toast {
     position: fixed;
     top: 20px;
@@ -342,6 +419,27 @@ h2::after {
 @keyframes slideInRight {
     from { transform: translateX(100%); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6); }
+    50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(255, 215, 0, 0.8); }
+}
+
+@keyframes steamRise {
+    0%, 100% { transform: translateY(0) scale(1) opacity: 0.7; }
+    50% { transform: translateY(-10px) scale(1.2) opacity: 0.4; }
+}
+
+/* Mobile fixes for better design */
+@media (max-width: 768px) {
+    .menu-card.margherita .menu-image img {
+        height: 200px;
+    }
+    
+    .menu-card.margherita {
+        margin-bottom: 2rem;
+    }
 }
 
 :root {

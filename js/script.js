@@ -160,13 +160,8 @@ function initMenuTabs() {
 function initCart() {
     let cart = JSON.parse(localStorage.getItem('pizzaCart')) || [];
     
-    // Legacy .add-cart-btn
-    document.querySelectorAll('.add-cart-btn').forEach(btn => {
-        btn.addEventListener('click', addToCartHandler(btn));
-    });
-    
-    // New .details-btn
-    document.querySelectorAll('.details-btn').forEach(btn => {
+    // All cart buttons: .add-cart-btn, .details-btn
+    document.querySelectorAll('.add-cart-btn, .details-btn').forEach(btn => {
         btn.addEventListener('click', addToCartHandler(btn));
     });
     

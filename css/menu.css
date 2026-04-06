@@ -200,7 +200,8 @@
     box-shadow: 0 20px 60px rgba(0,0,0,0.12);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
-    height: 620px;
+    height: auto;
+    min-height: 500px;
     display: flex;
     flex-direction: column;
 }
@@ -211,7 +212,7 @@
 }
 
 .menu-image {
-    height: 420px;
+    height: 360px;
     width: 100%;
     overflow: hidden;
     position: relative;
@@ -238,10 +239,11 @@
 }
 
 .menu-info {
-    padding: 2rem;
+    padding: 1.5rem 2rem 1rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
 }
 
 .menu-info h3 {

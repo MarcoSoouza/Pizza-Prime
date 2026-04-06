@@ -1,0 +1,1 @@
+# TODO: Fix CSS Syntax Errors in style.css\n\n1. [ ] Add missing semicolon to line 522 property.\n2. [ ] Fix invalid rule/selector on line 523.\n3. [ ] Validate media query closure at file end.\n4. [ ] Check VSCode errors cleared.\n5. [ ] Test site reload.

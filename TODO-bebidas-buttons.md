@@ -11,6 +11,9 @@
 - menu.html opened
 - Buttons added/visible, cart handler unified
 - Test: Click bebidas → expect "Adicionado!" toast + localStorage
-### 6. [ ] Git commit/push + deploy to live site
+### 6. ✅ Git commit/push + deploy to live site
+[main 2653d58] feat: add buttons to bebidas
+Pushed to origin/main
+Live: https://marcosoouza.github.io/Pizza-Prime/menu.html#bebidas (wait 1-2 min)
 
 **Status:** Starting implementation

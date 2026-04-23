@@ -1,5 +1,7 @@
-// Pizza Prime Admin Panel - FIXED Navigation
-// Direct access, no login, full functionality
+// Pizza Prime Admin Panel - FIXED Navigation + ESTOQUE FUNCIONAL
+// Conectado ao backend Flask na porta 5000
+
+const API_BASE = "http://localhost:5000/api";
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('=== PIZZA PRIME ADMIN LOADED ===');
@@ -11,17 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Sections found:', sections.length);
     console.log('Nav links found:', navLinks.length);
 
-    // Mock Data
+    // Mock Data (mantido para gráficos e pedidos)
     const mockData = {
         kpis: { revenue: 47892.43, orders: 156, profit: 18745.20, lowstock: 3 },
-        stock: [
-            { name: 'Margherita Premium', current: 12, min: 20, status: 'low' },
-            { name: 'Calabresa Especial', current: 45, min: 20, status: 'ok' },
-            { name: 'Frango BBQ', current: 28, min: 15, status: 'ok' },
-            { name: 'Quatro Queijos', current: 33, min: 25, status: 'ok' },
-            { name: 'Chocolate Morango', current: 18, min: 10, status: 'ok' },
-            { name: 'Prime Especial', current: 22, min: 20, status: 'low' }
-        ],
         recentOrders: [
             { id: '#PP001', client: 'João Silva', items: 2, total: 128.90, status: 'entregue', date: '2024-10-15 19:32' },
             { id: '#PP002', client: 'Maria Oliveira', items: 3, total: 189.70, status: 'preparando', date: '2024-10-15 20:15' },
@@ -32,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     let charts = {};
+    let estoqueData = [];
 
     // Force show panel
     document.querySelector('.admin-layout').style.display = 'flex';
@@ -49,26 +44,26 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Target ID:', targetId, 'Section:', !!targetSection);
             
             if (targetSection) {
-                // Hide all sections
                 sections.forEach(s => {
                     s.style.display = 'none';
                     s.classList.remove('active');
                 });
                 
-                // Show target
                 targetSection.style.display = 'block';
                 targetSection.classList.add('active');
                 
-                // Update nav active
                 navLinks.forEach(l => l.classList.remove('active'));
                 this.classList.add('active');
                 
                 console.log('Switched to:', targetId);
+
+                // Recarrega estoque ao entrar na aba
+                if (targetId === 'estoque') {
+                    carregarEstoque();
+                }
             }
         });
     });
-
-    // Logout handler removed - now direct <a> link in HTML
 
     // Update KPIs
     function updateKPIs() {
@@ -85,22 +80,151 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Populate tables
-    function populateTables() {
-        // Stock
+    // ============================================================
+    // ESTOQUE FUNCIONAL — INTEGRADO AO BANCO
+    // ============================================================
+
+    async function carregarEstoque() {
         const stockTbody = document.querySelector('#estoque tbody');
-        if (stockTbody) {
-            stockTbody.innerHTML = mockData.stock.map(item => `
-                <tr class="${item.status}">
-                    <td>${item.name}</td>
-                    <td>${item.current}</td>
-                    <td>${item.min}</td>
-                    <td><span class="status ${item.status}">${item.status === 'low' ? '🔴 Baixo' : '🟢 OK'}</span></td>
-                    <td><button class="btn-small ${item.status === 'low' ? 'reorder' : ''}">${item.status === 'low' ? 'Reabastecer' : 'Editar'}</button></td>
-                </tr>
-            `).join('');
+        if (!stockTbody) return;
+
+        stockTbody.innerHTML = '<tr><td colspan="5" class="text-center">Carregando...</td></tr>';
+
+        try {
+            const res = await fetch(`${API_BASE}/estoque`);
+            if (!res.ok) throw new Error('Erro ao carregar estoque');
+            estoqueData = await res.json();
+
+            renderizarEstoque();
+            atualizarBadgeEstoque();
+        } catch (err) {
+            console.error(err);
+            stockTbody.innerHTML = `<tr><td colspan="5" class="text-center" style="color:#dc3545">⚠️ Erro: ${err.message}<br><small>Verifique se o servidor está rodando (py api.py)</small></td></tr>`;
+        }
+    }
+
+    function renderizarEstoque() {
+        const stockTbody = document.querySelector('#estoque tbody');
+        if (!stockTbody) return;
+
+        if (estoqueData.length === 0) {
+            stockTbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum item no estoque.</td></tr>';
+            return;
         }
 
+        stockTbody.innerHTML = estoqueData.map(item => `
+            <tr class="${item.status}">
+                <td>${item.nome}</td>
+                <td>${item.quantidade_atual}</td>
+                <td>${item.quantidade_minima}</td>
+                <td><span class="status ${item.status}">${item.status === 'low' ? '🔴 Baixo' : '🟢 OK'}</span></td>
+                <td>
+                    <button class="btn-small reorder" data-id="${item.id}">Reabastecer +10</button>
+                    <button class="btn-small" data-id="${item.id}" data-action="edit">Editar</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function atualizarBadgeEstoque() {
+        const lowCount = estoqueData.filter(i => i.status === 'low').length;
+        const badge = document.querySelector('a[data-section="estoque"] .badge');
+        if (badge) badge.textContent = lowCount;
+    }
+
+    async function reabastecerItem(id) {
+        try {
+            const res = await fetch(`${API_BASE}/estoque/${id}/reabastecer`, { method: 'POST' });
+            const data = await res.json();
+            if (data.sucesso) {
+                // Atualiza localmente para evitar reload completo
+                const idx = estoqueData.findIndex(i => i.id === id);
+                if (idx !== -1) {
+                    estoqueData[idx].quantidade_atual = data.item.quantidade_atual;
+                    estoqueData[idx].status = data.item.status;
+                }
+                renderizarEstoque();
+                atualizarBadgeEstoque();
+                mostrarToast(`✅ ${data.item.nome} reabastecido! Agora: ${data.item.quantidade_atual} unidades`, 'success');
+            } else {
+                alert('Erro: ' + data.erro);
+            }
+        } catch (err) {
+            alert('Erro de conexão: ' + err.message);
+        }
+    }
+
+    async function editarItem(id) {
+        const item = estoqueData.find(i => i.id === id);
+        if (!item) return;
+
+        const novoAtual = prompt(`Editar quantidade atual de "${item.nome}":`, item.quantidade_atual);
+        if (novoAtual === null) return;
+
+        const novaMinima = prompt(`Editar quantidade mínima de "${item.nome}":`, item.quantidade_minima);
+        if (novaMinima === null) return;
+
+        const payload = {};
+        if (novoAtual !== '') payload.quantidade_atual = parseInt(novoAtual);
+        if (novaMinima !== '') payload.quantidade_minima = parseInt(novaMinima);
+
+        try {
+            const res = await fetch(`${API_BASE}/estoque/${id}/editar`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.sucesso) {
+                const idx = estoqueData.findIndex(i => i.id === id);
+                if (idx !== -1) {
+                    estoqueData[idx].quantidade_atual = data.item.quantidade_atual;
+                    estoqueData[idx].quantidade_minima = data.item.quantidade_minima;
+                    estoqueData[idx].status = data.item.status;
+                }
+                renderizarEstoque();
+                atualizarBadgeEstoque();
+                mostrarToast(`✅ ${data.item.nome} atualizado!`, 'success');
+            } else {
+                alert('Erro: ' + data.erro);
+            }
+        } catch (err) {
+            alert('Erro de conexão: ' + err.message);
+        }
+    }
+
+    function mostrarToast(mensagem, tipo = 'success') {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed; top: 20px; right: 20px;
+            background: ${tipo === 'success' ? '#28a745' : '#dc3545'};
+            color: white; padding: 1rem 1.5rem; border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 9999;
+            font-weight: 600; animation: fadeIn 0.3s ease;
+        `;
+        toast.textContent = mensagem;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.5s';
+            setTimeout(() => toast.remove(), 500);
+        }, 3000);
+    }
+
+    // Event delegation para botões de estoque
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('reorder')) {
+            const id = parseInt(e.target.dataset.id);
+            reabastecerItem(id);
+        }
+        if (e.target.dataset.action === 'edit') {
+            const id = parseInt(e.target.dataset.id);
+            editarItem(id);
+        }
+    });
+
+    // Populate tables (mantém pedidos mockados, estoque vem da API)
+    function populateTables() {
         // Orders
         const ordersTbody = document.querySelector('#pedidos tbody');
         if (ordersTbody) {
@@ -121,7 +245,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function initCharts() {
         if (typeof Chart === 'undefined') return console.warn('Chart.js not loaded');
         
-        // Orders Chart
         const ordersCtx = document.getElementById('ordersChart')?.getContext('2d');
         if (ordersCtx) charts.orders = new Chart(ordersCtx, {
             type: 'doughnut',
@@ -129,7 +252,6 @@ document.addEventListener('DOMContentLoaded', function() {
             options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
         });
 
-        // Sales Chart
         const salesCtx = document.getElementById('salesChart')?.getContext('2d');
         if (salesCtx) charts.sales = new Chart(salesCtx, {
             type: 'line',
@@ -140,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function() {
             options: { responsive: true, scales: { y: { beginAtZero: true } } }
         });
 
-        // Products Chart
         const productsCtx = document.getElementById('productsChart')?.getContext('2d');
         if (productsCtx) charts.products = new Chart(productsCtx, {
             type: 'bar',
@@ -152,17 +273,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Init everything
     updateKPIs();
     populateTables();
+    carregarEstoque(); // Pré-carrega estoque
     setTimeout(initCharts, 500);
 
     // Real-time
     setInterval(updateKPIs, 5000);
 
-    // Button actions
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('reorder')) alert('🛒 Reabastecimento enviado!');
-        if (e.target.classList.contains('btn-small') && !e.target.classList.contains('reorder')) alert('✏️ Edição iniciada!');
-    });
-
     console.log('=== ADMIN READY ===');
 });
-

@@ -494,13 +494,13 @@ function initLoadMore() {
     });
 }
 
-// Voice Hover - Announce pizza flavor and ingredients on hover
+// Voice Hover - Announce pizza flavor and ingredients on hover/click
 function initVoiceHover() {
     if (!('speechSynthesis' in window)) return; // Skip if not supported
 
     const cards = document.querySelectorAll('.pizza-card');
     cards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
+        function speakCard() {
             const name = card.querySelector('h3')?.textContent.trim();
             const ingredients = card.querySelector('p')?.textContent.trim();
             if (!name) return;
@@ -513,10 +513,22 @@ function initVoiceHover() {
             utterance.rate = 1;
             utterance.pitch = 1;
             window.speechSynthesis.speak(utterance);
+        }
+
+        // Desktop: hover
+        card.addEventListener('mouseenter', () => {
+            speakCard();
         });
 
         card.addEventListener('mouseleave', () => {
             window.speechSynthesis.cancel();
+        });
+
+        // Mobile: click/tap anywhere on the card (but not on buttons)
+        card.addEventListener('click', (e) => {
+            // Ignore clicks on buttons inside the card to avoid conflict with cart/add actions
+            if (e.target.closest('button')) return;
+            speakCard();
         });
     });
 }

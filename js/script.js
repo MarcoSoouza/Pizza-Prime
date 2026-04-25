@@ -156,30 +156,85 @@ function initMenuTabs() {
     });
 }
 
-// 2. Enhanced Cart Functionality (supports .add-cart-btn and .details-btn)
+// ==================== CART FUNCTIONALITY ====================
+
+const CART_KEY = 'pizzaPrimeCart';
+
+function getCart() {
+    try {
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    } catch {
+        return [];
+    }
+}
+
+function saveCart(cart) {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    updateCartUI();
+}
+
+function addToCart(name, price) {
+    const cart = getCart();
+    const existing = cart.find(item => item.name === name);
+    if (existing) {
+        existing.qty += 1;
+    } else {
+        cart.push({ name, price, qty: 1 });
+    }
+    saveCart(cart);
+}
+
+function removeFromCart(name) {
+    let cart = getCart().filter(item => item.name !== name);
+    saveCart(cart);
+}
+
+function updateQty(name, delta) {
+    const cart = getCart();
+    const item = cart.find(i => i.name === name);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) {
+        removeFromCart(name);
+        return;
+    }
+    saveCart(cart);
+}
+
+function clearCart() {
+    localStorage.removeItem(CART_KEY);
+    localStorage.removeItem('pizzaCart'); // legacy cleanup
+    updateCartUI();
+}
+
+function getCartTotal() {
+    return getCart().reduce((sum, item) => sum + item.price * item.qty, 0);
+}
+
+function getCartCount() {
+    return getCart().reduce((sum, item) => sum + item.qty, 0);
+}
+
+function formatPrice(price) {
+    return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
 function initCart() {
-    let cart = JSON.parse(localStorage.getItem('pizzaCart')) || [];
-    
-    // All cart buttons: .add-cart-btn, .details-btn
+    // Clear legacy cart and start fresh
+    localStorage.removeItem('pizzaCart');
+
+    // Bind add buttons
     document.querySelectorAll('.add-cart-btn, .details-btn').forEach(btn => {
-        btn.addEventListener('click', addToCartHandler(btn));
-    });
-    
-    function addToCartHandler(btn) {
-        return () => {
+        btn.addEventListener('click', () => {
             let name = btn.dataset.name;
             let priceStr = btn.dataset.price || btn.closest('.pizza-card')?.querySelector('.price')?.textContent || 'R$ 50';
-            
-            // Parse price from text like "R$ 52,00"
             let price = parseFloat(priceStr.replace(/[^\d,]/g, '').replace(',', '.'));
             if (!price) price = 50;
-            
-            if (!name) name = btn.closest('.pizza-card')?.querySelector('h3')?.textContent.trim() || 'Pizza';
-            
-            cart.push({name, price, qty: 1});
-            localStorage.setItem('pizzaCart', JSON.stringify(cart));
-            
-            // Visual feedback
+            if (!name) name = btn.closest('.pizza-card, .menu-card')?.querySelector('h3')?.textContent.trim() || 'Produto';
+
+            addToCart(name, price);
+
+            // Visual feedback on button
             const originalText = btn.textContent;
             btn.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
             btn.style.background = '#28a745';
@@ -187,23 +242,114 @@ function initCart() {
                 btn.textContent = originalText;
                 btn.style.background = '';
             }, 1500);
-            
-            showCartToast(cart.length);
-        };
+
+            openCartSidebar();
+        });
+    });
+
+    // Cart floating button
+    const cartFab = document.getElementById('cart-fab');
+    if (cartFab) {
+        cartFab.addEventListener('click', openCartSidebar);
     }
-    
-    function showCartToast(count) {
-        // Simple toast
-        const toast = document.createElement('div');
-        toast.style.cssText = `
-            position: fixed; top: 20px; right: 20px; background: #28a745; color: white; 
-            padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 8px 24px rgba(40,167,69,0.4);
-            z-index: 9999; font-weight: 600;
-        `;
-        toast.textContent = `🛒 Carrinho: ${count} item${count > 1 ? 's' : ''}`;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+
+    // Close sidebar
+    const closeBtn = document.getElementById('cart-close');
+    const overlay = document.getElementById('cart-overlay');
+    if (closeBtn) closeBtn.addEventListener('click', closeCartSidebar);
+    if (overlay) overlay.addEventListener('click', closeCartSidebar);
+
+    // Clear cart
+    const clearBtn = document.getElementById('cart-clear');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            if (confirm('Deseja limpar todos os itens do carrinho?')) {
+                clearCart();
+            }
+        });
     }
+
+    // Checkout via WhatsApp
+    const checkoutBtn = document.getElementById('cart-checkout');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', () => {
+            const cart = getCart();
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+            let msg = '*🍕 Pedido Pizza Prime*%0A%0A';
+            cart.forEach(item => {
+                msg += `• ${item.name} x${item.qty} = ${formatPrice(item.price * item.qty)}%0A`;
+            });
+            msg += `%0A*Total: ${formatPrice(getCartTotal())}*%0A%0AAguardo confirmação!`;
+            window.open(`https://wa.me/5511999999999?text=${msg}`, '_blank');
+        });
+    }
+
+    updateCartUI();
+}
+
+function updateCartUI() {
+    const cart = getCart();
+    const list = document.getElementById('cart-items');
+    const totalEl = document.getElementById('cart-total');
+    const countEl = document.getElementById('cart-count');
+    const emptyEl = document.getElementById('cart-empty');
+
+    if (countEl) countEl.textContent = getCartCount();
+
+    if (!list) return;
+
+    list.innerHTML = '';
+
+    if (cart.length === 0) {
+        if (emptyEl) emptyEl.style.display = 'flex';
+    } else {
+        if (emptyEl) emptyEl.style.display = 'none';
+        cart.forEach(item => {
+            const li = document.createElement('div');
+            li.className = 'cart-item';
+            li.innerHTML = `
+                <div class="cart-item-info">
+                    <span class="cart-item-name">${item.name}</span>
+                    <span class="cart-item-price">${formatPrice(item.price)}</span>
+                </div>
+                <div class="cart-item-controls">
+                    <button class="qty-btn minus" data-name="${item.name}">−</button>
+                    <span class="qty-value">${item.qty}</span>
+                    <button class="qty-btn plus" data-name="${item.name}">+</button>
+                    <button class="cart-item-remove" data-name="${item.name}"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `;
+            list.appendChild(li);
+        });
+
+        // Bind qty and remove buttons
+        list.querySelectorAll('.qty-btn.minus').forEach(btn => {
+            btn.addEventListener('click', () => updateQty(btn.dataset.name, -1));
+        });
+        list.querySelectorAll('.qty-btn.plus').forEach(btn => {
+            btn.addEventListener('click', () => updateQty(btn.dataset.name, 1));
+        });
+        list.querySelectorAll('.cart-item-remove').forEach(btn => {
+            btn.addEventListener('click', () => removeFromCart(btn.dataset.name));
+        });
+    }
+
+    if (totalEl) totalEl.textContent = formatPrice(getCartTotal());
+}
+
+function openCartSidebar() {
+    document.getElementById('cart-sidebar')?.classList.add('open');
+    document.getElementById('cart-overlay')?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCartSidebar() {
+    document.getElementById('cart-sidebar')?.classList.remove('open');
+    document.getElementById('cart-overlay')?.classList.remove('active');
+    document.body.style.overflow = '';
 }
 
 // 3. Multi-step Reserva Form
@@ -348,6 +494,33 @@ function initLoadMore() {
     });
 }
 
+// Voice Hover - Announce pizza flavor and ingredients on hover
+function initVoiceHover() {
+    if (!('speechSynthesis' in window)) return; // Skip if not supported
+
+    const cards = document.querySelectorAll('.pizza-card');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            const name = card.querySelector('h3')?.textContent.trim();
+            const ingredients = card.querySelector('p')?.textContent.trim();
+            if (!name) return;
+
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
+
+            const text = `Pizza ${name}. Ingredientes: ${ingredients || 'Informação não disponível'}.`;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'pt-BR';
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            window.speechSynthesis.speak(utterance);
+        });
+
+        card.addEventListener('mouseleave', () => {
+            window.speechSynthesis.cancel();
+        });
+    });
+}
+
 // Initialize all features
 document.addEventListener('DOMContentLoaded', () => {
     initMenuTabs();
@@ -355,6 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initLoadMore(); // New
     initMultiStepForm();
     initEnhancedForms();
+    initVoiceHover(); // New
     
     initAdminNav();
     // initAdminIcon() removido

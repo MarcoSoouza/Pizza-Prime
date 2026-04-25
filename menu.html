@@ -321,6 +321,43 @@
         </div>
     </footer>
 
+    <!-- Floating Cart Button -->
+    <button id="cart-fab" class="cart-fab" title="Ver Carrinho">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cart-count" class="cart-badge">0</span>
+    </button>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="cart-overlay"></div>
+
+    <!-- Cart Sidebar -->
+    <aside id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Meu Carrinho</h3>
+            <button id="cart-close" class="cart-close"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-body">
+            <div id="cart-empty" class="cart-empty">
+                <i class="fas fa-shopping-basket"></i>
+                <p>Seu carrinho está vazio</p>
+                <span>Adicione pizzas e bebidas!</span>
+            </div>
+            <div id="cart-items" class="cart-items"></div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>Total</span>
+                <strong id="cart-total">R$ 0,00</strong>
+            </div>
+            <button id="cart-checkout" class="cart-checkout">
+                <i class="fab fa-whatsapp"></i> Finalizar Pedido
+            </button>
+            <button id="cart-clear" class="cart-clear">
+                <i class="fas fa-trash-alt"></i> Limpar Carrinho
+            </button>
+        </div>
+    </aside>
+
     <!-- Floating WhatsApp Icon -->
     <a href="https://wa.me/5511999999999?text=Olá! Gostaria de fazer um pedido na Pizza Prime! 🍕" class="floating-whatsapp-icon" target="_blank" title="WhatsApp - Fazer Pedido">
         <i class="fab fa-whatsapp"></i>

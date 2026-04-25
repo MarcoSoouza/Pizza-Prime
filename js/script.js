@@ -498,20 +498,73 @@ function initLoadMore() {
 function initVoiceHover() {
     if (!('speechSynthesis' in window)) return; // Skip if not supported
 
+    // Warm-up: unlock speech synthesis on first user interaction (required for mobile/iOS)
+    let warmedUp = false;
+    function warmUpSpeech() {
+        if (warmedUp) return;
+        warmedUp = true;
+        // iOS Safari requires a speak() inside a user gesture to unlock audio
+        const dummy = new SpeechSynthesisUtterance('');
+        dummy.volume = 0;
+        window.speechSynthesis.speak(dummy);
+        window.speechSynthesis.cancel();
+        document.removeEventListener('touchstart', warmUpSpeech);
+        document.removeEventListener('click', warmUpSpeech);
+    }
+    document.addEventListener('touchstart', warmUpSpeech, { passive: true });
+    document.addEventListener('click', warmUpSpeech);
+
+    // Wait for voices to load before using them
+    let voices = [];
+    function loadVoices() {
+        voices = window.speechSynthesis.getVoices();
+    }
+    loadVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function getPtBrVoice() {
+        // Try to find a pt-BR voice; fallback to any pt or default
+        return voices.find(v => v.lang === 'pt-BR') ||
+               voices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt')) ||
+               null;
+    }
+
     const cards = document.querySelectorAll('.pizza-card');
     cards.forEach(card => {
+        let isSpeaking = false;
+
         function speakCard() {
             const name = card.querySelector('h3')?.textContent.trim();
             const ingredients = card.querySelector('p')?.textContent.trim();
             if (!name) return;
 
-            window.speechSynthesis.cancel(); // Stop any ongoing speech
+            // On mobile, calling cancel() immediately before speak() can
+            // leave the synthesis in a bad state. We pause and resume instead.
+            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                window.speechSynthesis.cancel();
+            }
+
+            // iOS Safari often pauses the synthesis engine; resume it
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
 
             const text = `Pizza ${name}. Ingredientes: ${ingredients || 'Informação não disponível'}.`;
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'pt-BR';
             utterance.rate = 1;
             utterance.pitch = 1;
+
+            // Use explicit pt-BR voice if available for better mobile support
+            const voice = getPtBrVoice();
+            if (voice) utterance.voice = voice;
+
+            utterance.onstart = () => { isSpeaking = true; };
+            utterance.onend = () => { isSpeaking = false; };
+            utterance.onerror = () => { isSpeaking = false; };
+
             window.speechSynthesis.speak(utterance);
         }
 
@@ -521,12 +574,20 @@ function initVoiceHover() {
         });
 
         card.addEventListener('mouseleave', () => {
-            window.speechSynthesis.cancel();
+            if (isSpeaking) window.speechSynthesis.cancel();
         });
 
-        // Mobile: click/tap anywhere on the card (but not on buttons)
+        // Mobile: use touchend (faster than click, 300 ms less delay) + click fallback
+        function onTap(e) {
+            // Ignore taps on buttons inside the card to avoid conflict with cart/add actions
+            if (e.target.closest('button')) return;
+            // Prevent ghost click from also firing immediately after touchend
+            e.preventDefault();
+            speakCard();
+        }
+
+        card.addEventListener('touchend', onTap);
         card.addEventListener('click', (e) => {
-            // Ignore clicks on buttons inside the card to avoid conflict with cart/add actions
             if (e.target.closest('button')) return;
             speakCard();
         });

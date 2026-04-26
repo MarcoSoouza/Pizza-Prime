@@ -20,6 +20,7 @@ CRUD (Create, Read, Update, Delete)
 Integração entre front-end e back-end
 Manipulação de banco de dados
 Organização de código e boas práticas
+
 🛠️ Tecnologias Utilizadas
 
 Exemplo (ajuste conforme seu projeto):
@@ -48,7 +49,7 @@ Painel administrativo
 
 💻 Como Executar o Projeto
 Clone o repositório:
-git clone https://github.com/seu-usuario/pizzaria.git
+git clone https://github.com/MarcoSoouza/Pizza-Prime/tree/main
 Acesse a pasta:
 cd pizzaria
 Instale as dependências:
@@ -56,7 +57,7 @@ npm install
 Execute o projeto:
 npm start
 Acesse no navegador:
-http://localhost:3000
+[http://localhost:3000](https://marcosoouza.github.io/Pizza-Prime/index.html)
 
 👨‍💻 Autores
 Seu Nome:
@@ -65,8 +66,10 @@ Lucas Dos Santos Nunes
 
 Nome dos integrantes do grupo:
 Marcos Souza
+
 Lucas Dos Santos Nunes
-Marcelo 
+
+Marcelo Galdino de medeiros
 
 📚 Aprendizados
 

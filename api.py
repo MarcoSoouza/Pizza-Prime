@@ -5,7 +5,7 @@ api.py
 Backend Flask para gestão de estoque e dados da Pizza Prime.
 """
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, make_response
 from flask_cors import CORS
 from database import (
     fetchall, fetchone, execute,
@@ -13,7 +13,13 @@ from database import (
 )
 
 app = Flask(__name__)
-CORS(app)  # Permite requisições do frontend estático
+CORS(app, resources={
+    r"/api/*": {
+        "origins": "*",
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 # ============================================================
 # ESTOQUE
@@ -102,8 +108,14 @@ def get_mesas():
     return jsonify(listar_mesas())
 
 
-@app.route("/api/reservas", methods=["GET"])
+@app.route("/api/reservas", methods=["GET", "OPTIONS"])
 def get_reservas():
+    if request.method == "OPTIONS":
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+        return response
     return jsonify(listar_reservas())
 
 
@@ -130,8 +142,15 @@ def atualizar_status_reserva_endpoint(reserva_id):
     return jsonify({"sucesso": True, "reserva_id": reserva_id, "status": status})
 
 
-@app.route("/api/reservas", methods=["POST"])
+@app.route("/api/reservas", methods=["POST", "OPTIONS"])
 def post_reserva():
+    if request.method == "OPTIONS":
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+        return response
+
     from database import criar_cliente, criar_reserva
     data = request.get_json() or {}
 

@@ -483,12 +483,11 @@
             msgBox.className = 'form-message';
             msgBox.textContent = '';
 
-            // Verifica se está rodando via file://
-            if (window.location.protocol === 'file:') {
-                msgBox.classList.add('error');
-                msgBox.innerHTML = '⚠️ Você precisa acessar esta página pelo servidor.<br>Acesse: <a href="http://127.0.0.1:5000/reserva.html" style="color:#ff4757;font-weight:700;">http://127.0.0.1:5000/reserva.html</a>';
-                return;
-            }
+            // Detecta URL base da API automaticamente
+            const API_BASE = window.location.protocol === 'file:' 
+                ? 'http://127.0.0.1:5000' 
+                : '';
+            const API_URL = API_BASE + '/api/reservas';
 
             if (!document.getElementById('res-termos').checked) {
                 msgBox.classList.add('error');
@@ -531,7 +530,7 @@
             console.log('Enviando payload:', payload);
 
             try {
-                const res = await fetch('/api/reservas', {
+                const res = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)

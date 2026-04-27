@@ -115,6 +115,9 @@ CREATE TABLE reservas (
     data_reserva DATETIME NOT NULL,
     quantidade_pessoas INT NOT NULL,
     observacao TEXT,
+    status VARCHAR(20) DEFAULT 'pendente',
+    aniversario INT DEFAULT 0,
+    promocao VARCHAR(50),
 
     FOREIGN KEY (cliente_id) REFERENCES clientes(id),
     FOREIGN KEY (mesa_id) REFERENCES mesas(id),

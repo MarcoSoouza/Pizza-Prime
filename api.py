@@ -5,7 +5,7 @@ api.py
 Backend Flask para gestão de estoque e dados da Pizza Prime.
 """
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from database import (
     fetchall, fetchone, execute,
@@ -89,7 +89,7 @@ def editar_estoque(item_id):
 
 
 # ============================================================
-# OUTROS ENDPOINTS (prontos para uso futuro)
+# OUTROS ENDPOINTS
 # ============================================================
 
 @app.route("/api/sabores", methods=["GET"])
@@ -97,9 +97,72 @@ def get_sabores():
     return jsonify(listar_sabores())
 
 
+@app.route("/api/mesas", methods=["GET"])
+def get_mesas():
+    return jsonify(listar_mesas())
+
+
 @app.route("/api/reservas", methods=["GET"])
 def get_reservas():
     return jsonify(listar_reservas())
+
+
+@app.route("/api/reservas/hoje", methods=["GET"])
+def get_reservas_hoje():
+    from database import listar_reservas_hoje
+    return jsonify(listar_reservas_hoje())
+
+
+@app.route("/api/reservas/estatisticas", methods=["GET"])
+def get_estatisticas_reservas():
+    from database import estatisticas_reservas
+    return jsonify(estatisticas_reservas())
+
+
+@app.route("/api/reservas/<int:reserva_id>/status", methods=["POST"])
+def atualizar_status_reserva_endpoint(reserva_id):
+    from database import atualizar_status_reserva
+    data = request.get_json() or {}
+    status = data.get("status", "").strip().lower()
+    if status not in ("confirmada", "pendente", "cancelada"):
+        return jsonify({"sucesso": False, "erro": "Status inválido. Use: confirmada, pendente, cancelada"}), 400
+    atualizar_status_reserva(reserva_id, status)
+    return jsonify({"sucesso": True, "reserva_id": reserva_id, "status": status})
+
+
+@app.route("/api/reservas", methods=["POST"])
+def post_reserva():
+    from database import criar_cliente, criar_reserva
+    data = request.get_json() or {}
+
+    nome = data.get("nome", "").strip()
+    telefone = data.get("telefone", "").strip()
+    email = data.get("email", "").strip()
+    mesa_id = data.get("mesa_id")
+    data_reserva = data.get("data_reserva", "").strip()
+    quantidade_pessoas = data.get("quantidade_pessoas")
+    observacao = data.get("observacao", "").strip()
+    aniversario = 1 if data.get("aniversario") else 0
+    promocao = data.get("promo", "").strip()
+
+    if not nome or not telefone or not data_reserva or not mesa_id or not quantidade_pessoas:
+        return jsonify({"sucesso": False, "erro": "Campos obrigatórios faltando"}), 400
+
+    try:
+        cliente_id = criar_cliente(nome, telefone, email)
+        reserva_id = criar_reserva(
+            cliente_id=cliente_id,
+            mesa_id=int(mesa_id),
+            data_reserva=data_reserva,
+            quantidade_pessoas=int(quantidade_pessoas),
+            observacao=observacao,
+            status="pendente",
+            aniversario=aniversario,
+            promocao=promocao
+        )
+        return jsonify({"sucesso": True, "reserva_id": reserva_id, "cliente_id": cliente_id})
+    except Exception as e:
+        return jsonify({"sucesso": False, "erro": str(e)}), 500
 
 
 @app.route("/api/pedidos", methods=["GET"])
@@ -111,6 +174,20 @@ def get_pedidos():
 def get_itens_pedido(pedido_id):
     from database import listar_itens_pedido
     return jsonify(listar_itens_pedido(pedido_id))
+
+
+# ============================================================
+# SERVIR ARQUIVOS ESTÁTICOS (HTML, CSS, JS, IMAGENS)
+# ============================================================
+
+@app.route("/")
+def serve_index():
+    return send_from_directory(".", "reserva.html")
+
+
+@app.route("/<path:filename>")
+def serve_static(filename):
+    return send_from_directory(".", filename)
 
 
 # ============================================================

@@ -356,37 +356,42 @@ function closeCartSidebar() {
 function initMultiStepForm() {
     const form = document.getElementById('ultimateForm');
     if (!form) return;
-    
+    // Se ja existe o handler inline em reserva.html, nao redefinir
+    if (form.dataset.hasCustomHandler === 'true') return;
+
     const steps = form.querySelectorAll('.form-step');
     const prevBtn = form.querySelector('.step-prev');
     const nextBtn = form.querySelector('.step-next');
     const submitBtn = form.querySelector('.step-submit');
     let currentStep = 0;
-    
-function showStep(step) {
-        steps.forEach((s, i) => s.classList.toggle('active', i === step));
+
+    function showStep(step) {
+        steps.forEach((s, i) => {
+            s.classList.toggle('active', i === step);
+            s.style.display = i === step ? 'block' : 'none';
+        });
         prevBtn.classList.toggle('disabled', step === 0);
-        nextBtn.style.display = step === steps.length - 1 ? 'none' : 'block';
-        submitBtn.classList.remove('hidden');
-        submitBtn.style.display = step === steps.length - 1 ? 'block' : 'none';
-        const stepsIndicators = form.querySelectorAll('.step-indicator .step');
+        prevBtn.style.display = step === 0 ? 'none' : 'inline-block';
+        nextBtn.style.display = step === steps.length - 1 ? 'none' : 'inline-block';
+        submitBtn.style.display = step === steps.length - 1 ? 'inline-block' : 'none';
+        const stepsIndicators = document.querySelectorAll('.step-indicator .step');
         stepsIndicators.forEach((s, i) => s.classList.toggle('active', i === step));
     }
-    
+
     nextBtn.addEventListener('click', () => {
         if (validateStep(currentStep)) {
             currentStep++;
             showStep(currentStep);
         }
     });
-    
+
     prevBtn.addEventListener('click', () => {
         if (currentStep > 0) {
             currentStep--;
             showStep(currentStep);
         }
     });
-    
+
     function validateStep(step) {
         const inputs = steps[step].querySelectorAll('[required]');
         let valid = true;
@@ -395,13 +400,15 @@ function showStep(step) {
         });
         return valid;
     }
-    
+
     // Persist data
     form.querySelectorAll('input, select, textarea').forEach(input => {
-        input.addEventListener('change', () => localStorage.setItem(`form-${input.id}`, input.value));
-        const saved = localStorage.getItem(`form-${input.id}`);
+        input.addEventListener('change', () => localStorage.setItem('form-' + input.id, input.value));
+        const saved = localStorage.getItem('form-' + input.id);
         if (saved) input.value = saved;
     });
+
+    showStep(0);
 }
 
 // 4. Enhanced Contact Form + Phone Mask
@@ -429,25 +436,18 @@ function initEnhancedForms() {
     
 
     document.querySelectorAll('form').forEach(form => {
+        if (form.id === 'ultimateForm') return; // reserva.html tem seu proprio handler
         form.addEventListener('submit', function(e) {
+            e.preventDefault();
             const btn = this.querySelector('button[type="submit"]');
+            if (!btn) return;
             btn.disabled = true;
+            const originalHTML = btn.innerHTML;
             btn.innerHTML += ' <i class="fas fa-spinner fa-spin"></i>';
             setTimeout(() => {
                 btn.disabled = false;
-                btn.innerHTML = btn.innerHTML.replace(' <i class="fas fa-spinner fa-spin"></i>', '');
-                
-                if (this.id === 'ultimateForm') {
-                    alert('✅ RESERVA CONFIRMADA!\n\nNossa equipe WhatsApp entrará em contato em 5 minutos para finalizar.');
-                    // WhatsApp summary
-                    const phone = this.querySelector('input[type="tel"]').value.replace(/\D/g, '');
-                    if (phone) {
-                        const message = 'Reserva confirmada via site Pizza Prime!';
-                        window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(message)}`, '_blank');
-                    }
-                } else {
-                    alert('Enviado com sucesso!');
-                }
+                btn.innerHTML = originalHTML;
+                alert('Enviado com sucesso!');
                 this.reset();
             }, 2000);
         });

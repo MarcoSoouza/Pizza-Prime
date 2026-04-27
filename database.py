@@ -108,7 +108,10 @@ def listar_reservas() -> List[Dict[str, Any]]:
             m.capacidade,
             r.quantidade_pessoas,
             r.data_reserva,
-            r.observacao
+            r.observacao,
+            COALESCE(r.status, 'pendente') AS status,
+            r.aniversario,
+            r.promocao
         FROM reservas r
         JOIN clientes c ON r.cliente_id = c.id
         JOIN mesas m ON r.mesa_id = m.id
@@ -117,12 +120,100 @@ def listar_reservas() -> List[Dict[str, Any]]:
     return fetchall(sql)
 
 
+def listar_reservas_hoje() -> List[Dict[str, Any]]:
+    sql = """
+        SELECT
+            r.id,
+            c.nome AS cliente,
+            m.numero AS mesa,
+            m.capacidade,
+            r.quantidade_pessoas,
+            r.data_reserva,
+            r.observacao,
+            COALESCE(r.status, 'pendente') AS status,
+            r.aniversario,
+            r.promocao
+        FROM reservas r
+        JOIN clientes c ON r.cliente_id = c.id
+        JOIN mesas m ON r.mesa_id = m.id
+        WHERE date(r.data_reserva) = date('now', 'localtime')
+        ORDER BY r.data_reserva
+    """
+    return fetchall(sql)
+
+
+def estatisticas_reservas() -> Dict[str, Any]:
+    total_hoje = fetchone("""
+        SELECT COUNT(*) as total FROM reservas
+        WHERE date(data_reserva) = date('now', 'localtime')
+    """, ()) or {}
+    pendentes = fetchone("""
+        SELECT COUNT(*) as total FROM reservas
+        WHERE COALESCE(status, 'confirmada') = 'pendente'
+    """, ()) or {}
+    canceladas = fetchone("""
+        SELECT COUNT(*) as total FROM reservas
+        WHERE COALESCE(status, 'confirmada') = 'cancelada'
+    """, ()) or {}
+    ocupacao = fetchone("""
+        SELECT COALESCE(SUM(quantidade_pessoas), 0) as total FROM reservas
+        WHERE date(data_reserva) = date('now', 'localtime')
+        AND COALESCE(status, 'confirmada') != 'cancelada'
+    """, ()) or {}
+    return {
+        'reservas_hoje': total_hoje.get('total', 0),
+        'pendentes': pendentes.get('total', 0),
+        'canceladas': canceladas.get('total', 0),
+        'ocupacao_pessoas': ocupacao.get('total', 0),
+        'capacidade_total': 120
+    }
+
+
+def atualizar_status_reserva(reserva_id: int, status: str) -> bool:
+    execute(
+        "UPDATE reservas SET status = ? WHERE id = ?",
+        (status, reserva_id)
+    )
+    return True
+
+
 def listar_clientes() -> List[Dict[str, Any]]:
     return fetchall("SELECT * FROM clientes ORDER BY nome")
 
 
 def listar_mesas() -> List[Dict[str, Any]]:
     return fetchall("SELECT * FROM mesas ORDER BY numero")
+
+
+def criar_cliente(nome: str, telefone: str = "", email: str = "") -> int:
+    """Cria um novo cliente e retorna o id gerado."""
+    conn = get_connection()
+    cursor = conn.execute(
+        "INSERT INTO clientes (nome, telefone, email) VALUES (?, ?, ?)",
+        (nome, telefone, email)
+    )
+    conn.commit()
+    client_id = cursor.lastrowid
+    conn.close()
+    return client_id
+
+
+def criar_reserva(cliente_id: int, mesa_id: int, data_reserva: str,
+                  quantidade_pessoas: int, observacao: str = "",
+                  status: str = "pendente", aniversario: int = 0,
+                  promocao: str = "") -> int:
+    """Cria uma nova reserva e retorna o id gerado."""
+    conn = get_connection()
+    cursor = conn.execute(
+        """INSERT INTO reservas
+           (cliente_id, mesa_id, data_reserva, quantidade_pessoas, observacao, status, aniversario, promocao)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+        (cliente_id, mesa_id, data_reserva, quantidade_pessoas, observacao, status, aniversario, promocao)
+    )
+    conn.commit()
+    reserva_id = cursor.lastrowid
+    conn.close()
+    return reserva_id
 
 
 # ============================================================
@@ -173,3 +264,4 @@ if __name__ == "__main__":
     print("Reservas cadastradas:", len(listar_reservas()))
     print("Itens em estoque:", len(listar_estoque()))
     print("OK — módulo database.py funcionando.")
+

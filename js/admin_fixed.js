@@ -38,37 +38,57 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             console.log('NAV CLICKED:', this.href);
-            
+
             const targetId = this.getAttribute('href').substring(1);
             const targetSection = document.getElementById(targetId);
             console.log('Target ID:', targetId, 'Section:', !!targetSection);
-            
+
             if (targetSection) {
                 sections.forEach(s => {
                     s.style.display = 'none';
                     s.classList.remove('active');
                 });
-                
+
                 targetSection.style.display = 'block';
                 targetSection.classList.add('active');
-                
+
                 navLinks.forEach(l => l.classList.remove('active'));
                 this.classList.add('active');
-                
+
+                // Salva aba ativa
+                sessionStorage.setItem('admin_active_section', targetId);
+
                 console.log('Switched to:', targetId);
 
                 // Recarrega estoque ao entrar na aba
                 if (targetId === 'estoque') {
                     carregarEstoque();
                 }
+                // Recarrega reservas ao entrar na aba
+                if (targetId === 'reserva') {
+                    carregarReservas();
+                }
             }
         });
     });
+
+    // Restaura aba ativa ao carregar
+    const savedSection = sessionStorage.getItem('admin_active_section');
+    if (savedSection) {
+        const savedLink = document.querySelector(`.nav-item[href="#${savedSection}"]`);
+        if (savedLink) {
+            savedLink.click();
+        }
+    }
 
     // Update KPIs
     function updateKPIs() {
         document.querySelectorAll('[data-metric]').forEach(kpi => {
             const metric = kpi.dataset.metric;
+            // Pula métricas de reservas — elas são atualizadas pela API
+            if (['todays-reservations', 'occupancy', 'pending', 'canceled'].includes(metric)) {
+                return;
+            }
             let value = mockData.kpis[metric];
             if (metric === 'revenue' || metric === 'profit') {
                 value += (Math.random() - 0.5) * 1000;
@@ -214,16 +234,152 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event delegation para botões de estoque
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('reorder')) {
+            e.preventDefault();
+            e.stopPropagation();
             const id = parseInt(e.target.dataset.id);
             reabastecerItem(id);
         }
         if (e.target.dataset.action === 'edit') {
+            e.preventDefault();
+            e.stopPropagation();
             const id = parseInt(e.target.dataset.id);
             editarItem(id);
         }
     });
 
-    // Populate tables (mantém pedidos mockados, estoque vem da API)
+    // ============================================================
+    // RESERVAS FUNCIONAL — INTEGRADO AO BANCO
+    // ============================================================
+
+    async function carregarReservas() {
+        const reservasTbody = document.querySelector('#reserva .reserva-table tbody');
+        if (!reservasTbody) return;
+
+        reservasTbody.innerHTML = '<tr><td colspan="10" class="text-center">Carregando...</td></tr>';
+
+        try {
+            // Carrega estatísticas
+            const statsRes = await fetch(`${API_BASE}/reservas/estatisticas`);
+            const stats = await statsRes.json();
+            atualizarKPIsReservas(stats);
+
+            // Carrega todas as reservas
+            const res = await fetch(`${API_BASE}/reservas`);
+            if (!res.ok) throw new Error('Erro ao carregar reservas');
+            const reservas = await res.json();
+            renderizarReservas(reservas);
+        } catch (err) {
+            console.error(err);
+            reservasTbody.innerHTML = `<tr><td colspan="10" class="text-center" style="color:#dc3545">⚠️ Erro: ${err.message}<br><small>Verifique se o servidor está rodando (py api.py)</small></td></tr>`;
+        }
+    }
+
+    function atualizarKPIsReservas(stats) {
+        const kpiReservas = document.querySelector('[data-metric="todays-reservations"]');
+        const kpiOcupacao = document.querySelector('[data-metric="occupancy"]');
+        const kpiPendentes = document.querySelector('[data-metric="pending"]');
+        const kpiCanceladas = document.querySelector('[data-metric="canceled"]');
+
+        if (kpiReservas) kpiReservas.textContent = stats.reservas_hoje || 0;
+        if (kpiPendentes) kpiPendentes.textContent = stats.pendentes || 0;
+        if (kpiCanceladas) kpiCanceladas.textContent = stats.canceladas || 0;
+
+        if (kpiOcupacao) {
+            const pct = stats.capacidade_total > 0
+                ? Math.round((stats.ocupacao_pessoas / stats.capacidade_total) * 100)
+                : 0;
+            kpiOcupacao.textContent = pct + '%';
+            const trend = kpiOcupacao.parentElement.querySelector('.kpi-trend');
+            if (trend) trend.innerHTML = `<i class="fas fa-arrow-up"></i> ${stats.ocupacao_pessoas}/${stats.capacidade_total}`;
+        }
+
+        // Atualiza badge do menu
+        const badge = document.querySelector('a[data-section="reserva"] .badge');
+        if (badge) badge.textContent = stats.reservas_hoje || 0;
+    }
+
+    function renderizarReservas(reservas) {
+        const reservasTbody = document.querySelector('#reserva .reserva-table tbody');
+        if (!reservasTbody) return;
+
+        if (reservas.length === 0) {
+            reservasTbody.innerHTML = '<tr><td colspan="10" class="text-center">Nenhuma reserva encontrada.</td></tr>';
+            return;
+        }
+
+        const statusClasses = {
+            'confirmada': 'confirmed',
+            'pendente': 'pending',
+            'cancelada': 'canceled'
+        };
+        const statusLabels = {
+            'confirmada': 'CONFIRMADA',
+            'pendente': 'PENDENTE',
+            'cancelada': 'CANCELADA'
+        };
+
+        reservasTbody.innerHTML = reservas.map(r => {
+            const st = (r.status || 'confirmada').toLowerCase();
+            const stClass = statusClasses[st] || 'confirmed';
+            const stLabel = statusLabels[st] || 'CONFIRMADA';
+            const isCancelada = st === 'cancelada';
+            const aniversarioIcon = r.aniversario ? '🎉 Sim' : '-';
+            const promocaoLabel = r.promocao || '-';
+            return `
+            <tr class="${stClass}">
+                <td>#${r.id}</td>
+                <td>${r.cliente || '-'}</td>
+                <td>Mesa ${r.mesa || '-'} (cap: ${r.capacidade || '-'})</td>
+                <td>${r.data_reserva || '-'}</td>
+                <td>${r.quantidade_pessoas || '-'}</td>
+                <td>${r.observacao || '-'}</td>
+                <td>${aniversarioIcon}</td>
+                <td>${promocaoLabel}</td>
+                <td><span class="status ${stClass}">${stLabel}</span></td>
+                <td>
+                    <button class="btn-small btn-confirm" data-id="${r.id}" ${st === 'confirmada' ? 'disabled' : ''}>Confirmar</button>
+                    <button class="btn-small btn-cancel" data-id="${r.id}" ${isCancelada ? 'disabled' : ''}>Cancelar</button>
+                </td>
+            </tr>
+        `;}).join('');
+
+        // Bind botões de ação
+        reservasTbody.querySelectorAll('.btn-confirm').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                mudarStatusReserva(parseInt(this.dataset.id), 'confirmada');
+            });
+        });
+        reservasTbody.querySelectorAll('.btn-cancel').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                mudarStatusReserva(parseInt(this.dataset.id), 'cancelada');
+            });
+        });
+    }
+
+    async function mudarStatusReserva(id, status) {
+        try {
+            const res = await fetch(`${API_BASE}/reservas/${id}/status`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            });
+            const data = await res.json();
+            if (data.sucesso) {
+                mostrarToast(`Reserva #${id} ${status === 'cancelada' ? 'cancelada' : 'confirmada'}!`, 'success');
+                carregarReservas();
+            } else {
+                alert('Erro: ' + data.erro);
+            }
+        } catch (err) {
+            alert('Erro de conexão: ' + err.message);
+        }
+    }
+
+    // Populate tables (mantém pedidos mockados, estoque e reservas vêm da API)
     function populateTables() {
         // Orders
         const ordersTbody = document.querySelector('#pedidos tbody');
@@ -303,6 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateKPIs();
     populateTables();
     carregarEstoque(); // Pré-carrega estoque
+    carregarReservas(); // Pré-carrega reservas
     setTimeout(initCharts, 500);
 
     // Real-time

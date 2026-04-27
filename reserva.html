@@ -483,6 +483,13 @@
             msgBox.className = 'form-message';
             msgBox.textContent = '';
 
+            // Verifica se está rodando via file://
+            if (window.location.protocol === 'file:') {
+                msgBox.classList.add('error');
+                msgBox.innerHTML = '⚠️ Você precisa acessar esta página pelo servidor.<br>Acesse: <a href="http://127.0.0.1:5000/reserva.html" style="color:#ff4757;font-weight:700;">http://127.0.0.1:5000/reserva.html</a>';
+                return;
+            }
+
             if (!document.getElementById('res-termos').checked) {
                 msgBox.classList.add('error');
                 msgBox.textContent = 'Você precisa aceitar a política de reserva.';
@@ -521,13 +528,36 @@
             btnSubmit.disabled = true;
             btnSubmit.textContent = 'Enviando...';
 
+            console.log('Enviando payload:', payload);
+
             try {
                 const res = await fetch('/api/reservas', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
+
+                console.log('Status HTTP:', res.status);
+
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({}));
+                    console.error('Erro do servidor:', errorData);
+                    msgBox.classList.add('error');
+                    if (res.status === 400) {
+                        msgBox.textContent = 'Erro: ' + (errorData.erro || 'Dados inválidos. Verifique os campos.');
+                    } else if (res.status === 500) {
+                        msgBox.textContent = 'Erro no servidor: ' + (errorData.erro || 'Tente novamente mais tarde.');
+                    } else {
+                        msgBox.textContent = 'Erro ' + res.status + ': ' + (errorData.erro || 'Tente novamente.');
+                    }
+                    btnSubmit.disabled = false;
+                    btnSubmit.textContent = originalText;
+                    return;
+                }
+
                 const data = await res.json();
+                console.log('Resposta do servidor:', data);
+
                 if (data.sucesso) {
                     let detalhesHtml = '<strong>Reserva #' + data.reserva_id + '</strong><br>' +
                         'Nome: ' + payload.nome + '<br>' +
@@ -548,7 +578,7 @@
             } catch (err) {
                 console.error('Erro ao enviar reserva:', err);
                 msgBox.classList.add('error');
-                msgBox.innerHTML = 'Erro de conexão com o servidor.<br>Por favor, tente novamente em alguns instantes.<br>Se o problema persistir, entre em contato pelo WhatsApp.';
+                msgBox.innerHTML = 'Erro de conexão com o servidor.<br>Verifique se a API está rodando (python api.py).<br>Acesse via: <a href="http://127.0.0.1:5000/reserva.html" style="color:#ff4757;font-weight:700;">http://127.0.0.1:5000/reserva.html</a>';
             } finally {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = originalText;

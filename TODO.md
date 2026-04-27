@@ -13,5 +13,5 @@
 - [x] Step 3: Update api.py
 - [x] Step 4: Update reserva.html
 - [x] Step 5: Update reserva.css
-- [ ] Step 6: Test full reservation flow
-
+- [x] Step 6: Test full reservation flow
+- [x] Step 7: Push to GitHub

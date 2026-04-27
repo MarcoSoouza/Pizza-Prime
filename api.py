@@ -9,7 +9,7 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from database import (
     fetchall, fetchone, execute,
-    listar_sabores, listar_reservas, listar_pedidos
+    listar_sabores, listar_mesas, listar_reservas, listar_pedidos
 )
 
 app = Flask(__name__)
